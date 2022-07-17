@@ -19,7 +19,7 @@ class Candy {
         this.scorableVert = scorableVert;
     }
 }
-
+// make a non empty totally random array
 const createEmptyArray = () => {
     let itemMap = [];
     for (let j = 0; j < BOARDHEIGHT; j++) {
@@ -31,7 +31,7 @@ const createEmptyArray = () => {
     }
     return itemMap;        
 }
-
+// filter the candies
 const fillRowsTopTwo = array => {
     for (let j = 0; j < 2; j++) {
         for (let i = 0; i < BOARDWIDTH; i++) {
