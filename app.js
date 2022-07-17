@@ -58,63 +58,76 @@ const fillRowsThreeAndBelow = array => {
     }        
 }
 
+const paintTarget = event => {
+    const candyTarget = event.target;
+    // console.log(candyTarget.className);
+    const candyTargetInfoArray = candyTarget.className.split(" ");
+    // console.log(candyTargetInfoArray);
+    const candyClass = `${candyTargetInfoArray[0]}`;
+    const rowClass = `${candyTargetInfoArray[1]}`;
+    const colClass = `${candyTargetInfoArray[2]}`;
+    newGameArray.forEach(array => {
+        array.forEach(candy => {
+            if (candy.name === candyClass && candy.row === rowClass && candy.col === colClass) {
+                // console.log("target found"+ candy.row + candy.col)
+                candy.target = true;
+            }
+        })
+    })
+    $(`.${candyClass}.${rowClass}.${colClass}`).addClass("target");
+    render();
+}
 
+const checkTargets = array => {
+    let candyTargetArray = [];
+    array.forEach(array => {
+        array.forEach(candy => {
+            if (candy.target === true) {
+                candyTargetArray.push(candy);
+            }
+        })
+    })
+    console.log(candyTargetArray)
+    return candyTargetArray;
+}
 
-
-
-const render = array => {
+const render = () => {
     $container.empty();
     const $gameBoard = $("<div>").addClass("game-board");
-    for (let j = 0; j < array.length; j++) {
+    candyTargetArray = checkTargets(newGameArray);
+    for (let j = 0; j < newGameArray.length; j++) {
         const $row = $("<div>").addClass("row");
-        for (let i=0; i < array[j].length; i++) {
-            const $candyImg = $("<div>").addClass(`${array[j][i].name}`);
-            $candyImg.addClass(`${array[j][i].row}`);
-            $candyImg.addClass(`${array[j][i].col}`);
-            $candyImg.click((event) => {
-                const candyTarget = event.target;
-                // console.log(candyTarget.className);
-                const candyTargetInfoArray = candyTarget.className.split(" ");
-                // console.log(candyTargetInfoArray);
-                const candyClass = `${candyTargetInfoArray[0]}`;
-                const rowClass = `${candyTargetInfoArray[1]}`;
-                const colClass = `${candyTargetInfoArray[2]}`;
-                array.forEach(array => {
-                    array.forEach(candy => {
-                        if (candy.name === candyClass && candy.row === rowClass && candy.col === colClass) {
-                            // console.log("target found"+ candy.row + candy.col)
-                            candy.target = true;
-                        }
-                    })
-                })
-                $(`.${candyClass}.${rowClass}.${colClass}`).addClass("target");
-                console.log(array);
-            });
+        for (let i=0; i < newGameArray[j].length; i++) {
+            const $candyImg = $("<div>").addClass(`${newGameArray[j][i].name}`);
+            $candyImg.addClass(`${newGameArray[j][i].row}`);
+            $candyImg.addClass(`${newGameArray[j][i].col}`);
+            if (newGameArray[j][i].target === true) {
+                $candyImg.addClass("target")
+            }
+            if (candyTargetArray.length <=1) {
+                $candyImg.click(paintTarget);
+            }
+            
             $row.append($candyImg);
         }
         $gameBoard.append($row);
     }
+    // console.log("hihi");
     $container.append($gameBoard);
-    return array;
 }
 
 const main = () => {    
 
-    let newGameArray = createEmptyArray();
-    let targets = 0;
-
+    newGameArray = createEmptyArray();
     fillRowsTopTwo(newGameArray);
     fillRowsThreeAndBelow(newGameArray);
-    console.log(newGameArray);
-    newGameArray = render(newGameArray);
+    // console.log(newGameArray);
+    render();
     
-    
-    
-
-
     
     
    }
 
-
+let newGameArray = [];
+let candyTargetArray = [];
 $(main);
