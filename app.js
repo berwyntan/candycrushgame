@@ -46,7 +46,24 @@ const fillRowsThreeAndBelow = array => {
     }        
 }
 
+const getCandyTarget = event => {
+    const candyTarget = event.target;
+    console.log(candyTarget.className);
+    const candyTargetInfoArray = candyTarget.className.split(" ");
+    console.log(candyTargetInfoArray);
+    highlightCandyTarget(candyTargetInfoArray);
+    
+}
+
+const highlightCandyTarget = array => {
+    const candyClass = `.${array[0]}`;
+    const rowClass = `.${array[1]}`;
+    const colClass = `.${array[2]}`;
+    $(`${candyClass}${rowClass}${colClass}`).addClass("target");    
+}
+
 const render = array => {
+    $container.html = "";
     const $gameBoard = $("<div>").addClass("game-board");
     for (let j = 0; j < array.length; j++) {
         const $row = $("<div>").addClass("row");
@@ -54,6 +71,7 @@ const render = array => {
             const $candyImg = $("<div>").addClass(`${array[j][i]}`);
             $candyImg.addClass(`row${j}`);
             $candyImg.addClass(`col${i}`);
+            $candyImg.click(getCandyTarget);
             $row.append($candyImg);
         }
         $gameBoard.append($row);
