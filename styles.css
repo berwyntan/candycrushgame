@@ -1,47 +1,48 @@
 .row {
     display: flex;
+    justify-content: center;
 }
 
-.item1 {
+.candy1 {
     width: 50px;
     height: 50px;
     border: 1px solid black;
 }
 
-.item1::before {
+.candy1::before {
     content: "1";
     font-size: 20px;
 }
 
-.item2 {
+.candy2 {
     width: 50px;
     height: 50px;
     border: 1px solid black;
 }
 
-.item2::before {
+.candy2::before {
     content: "2";
     font-size: 20px;
 }
 
-.item3 {
+.candy3 {
     width: 50px;
     height: 50px;
     border: 1px solid black;
 }
 
-.item3::before {
+.candy3::before {
     content: "3";
     font-size: 20px;
 }
 
-.item4 {
+.candy4 {
     width: 50px;
     height: 50px;
     border: 1px solid black;
 }
 
-.item4::before {
+.candy4::before {
     content: "4";
     font-size: 20px;
 }
