@@ -72,30 +72,37 @@ const fillRowsThreeAndBelow = array => {
     return array;      
 }
 
-const getCandyTarget = event => {
+const paintTarget = event => {
     const candyTarget = event.target;
-    console.log(candyTarget.className);
+    // console.log(candyTarget.className);
     const candyTargetInfoArray = candyTarget.className.split(" ");
-    console.log(candyTargetInfoArray);
+    // console.log(candyTargetInfoArray);
     const candyClass = `${candyTargetInfoArray[0]}`;
     const rowClass = `${candyTargetInfoArray[1]}`;
     const colClass = `${candyTargetInfoArray[2]}`;
     newGameArray.forEach(array => {
         array.forEach(candy => {
             if (candy.name === candyClass && candy.row === rowClass && candy.col === colClass) {
-                console.log("target found"+ candy.row + candy.col)
+                // console.log("target found"+ candy.row + candy.col)
                 candy.target = true;
             }
         })
     })
-    
+    $(`.${candyClass}.${rowClass}.${colClass}`).addClass("target");
+    render();
 }
 
-const highlightCandyTarget = array => {
-    const candyClass = `.${array[0]}`;
-    const rowClass = `.${array[1]}`;
-    const colClass = `.${array[2]}`;
-    $(`${candyClass}${rowClass}${colClass}`).addClass("target");    
+const checkTargets = array => {
+    let candyTargetArray = [];
+    array.forEach(array => {
+        array.forEach(candy => {
+            if (candy.target === true) {
+                candyTargetArray.push(candy);
+            }
+        })
+    })
+    console.log(candyTargetArray)
+    return candyTargetArray;
 }
 
 
@@ -103,7 +110,8 @@ const highlightCandyTarget = array => {
 const render = array => {
     $container.empty();
     const $gameBoard = $("<div>").addClass("game-board");
-    for (let j = 0; j < array.length; j++) {
+    candyTargetArray = checkTargets(newGameArray);
+    for (let j = 0; j < newGameArray.length; j++) {
         const $row = $("<div>").addClass("row");
         for (let i=0; i < array[j].length; i++) {
             const $candyImg = $("<div>").addClass(`${array[j][i].name}`);
@@ -114,7 +122,8 @@ const render = array => {
         }
         $gameBoard.append($row);
     }
-    return $gameBoard;
+    // console.log("hihi");
+    $container.append($gameBoard);
 }
 
 const main = () => {    
@@ -135,5 +144,6 @@ const main = () => {
     
    }
 
-
+// let newGameArray = [];
+// let candyTargetArray = [];
 $(main);
