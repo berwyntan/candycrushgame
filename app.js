@@ -9,43 +9,42 @@ const $container = $(".container");
 // run thru the 12 patterns to check available moves
 // try out the draggable and droppable jquery
 class Candy {
-    constructor(name, row, col, target=false, clickable=false, scorableHorz=false, scorableVert=false) {
+    constructor(name, row, col, target=false, clickable=false) {
         this.name = name;
         this.row = `row${row}`;
         this.col = `col${col}`;
         this.target = target;
         this.clickable = clickable;
-        this.scorableHorz = scorableHorz;
-        this.scorableVert = scorableVert;
     }
 }
 // make a non empty totally random array
-const createEmptyArray = () => {
+const createRandomArray = () => {
     let itemMap = [];
     for (let j = 0; j < BOARDHEIGHT; j++) {
         let itemRow = [];
         for (let i = 0; i < BOARDWIDTH; i++) {
-            itemRow.push("empty");
+            // itemRow.push("empty");
+            const candyRandom = CANDIES[Math.floor(Math.random() * CANDIES.length)];
+            itemRow[i] = new Candy(candyRandom, j, i);
         }
         itemMap.push(itemRow);
     }
     return itemMap;        
 }
 // filter the candies
-const fillRowsTopTwo = array => {
+const filterRowsTopTwo = array => {
     for (let j = 0; j < 2; j++) {
         for (let i = 0; i < BOARDWIDTH; i++) {
-            const candyRandom = CANDIES[Math.floor(Math.random() * CANDIES.length)];
-            array[j][i] = new Candy(candyRandom, j, i);
-            // let candyAvailable = CANDIES.map((candy) => candy);
-            // if (i>=2) {
-            //     if (array[j][i-2].name === array[j][i-1].name) {
-            //         candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j][i-2].name);
-            //         // console.log(candyAvailable);
-            //     }
-            // }
-            // const candyRandom = candyAvailable[Math.floor(Math.random() * candyAvailable.length)];
-            // array[j][i] = new Candy(candyRandom, j, i);
+            if (i>=2) {
+                let candyAvailable = CANDIES.map((candy) => candy);
+                if (array[j][i-2].name === array[j][i-1].name) {
+                    candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j][i-2].name);
+                    // console.log(candyAvailable);
+                    const candyRandom = candyAvailable[Math.floor(Math.random() * candyAvailable.length)];
+                    console.log(candyRandom)
+                    array[j][i] = new Candy(candyRandom, j, i);
+                }
+            }                
         }
     }   
     return array;     
@@ -56,17 +55,19 @@ const fillRowsThreeAndBelow = array => {
         for (let i = 0; i < BOARDWIDTH; i++) {
             let candyAvailable = CANDIES.map((candy) => candy);
             if (array[j-2][i].name === array[j-1][i].name) {
-                candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j-2][i].name);
-                // console.log(candyAvailable);
-            }
-            if (i >= 2) {
-                if (array[j][i-2].name === array[j][i-1].name) {
-                    candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j][i-2].name);
-                    // console.log(candyAvailable);
+                candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j-1][i].name);
+                console.log(candyAvailable);
+                if (i >= 2) {
+                    if (array[j][i-2].name === array[j][i-1].name) {
+                        candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j][i-2].name);
+                        console.log(candyAvailable);
+                    }
                 }
             }
+            
             const candyRandom = candyAvailable[Math.floor(Math.random() * candyAvailable.length)];
             array[j][i] = new Candy(candyRandom, j, i);
+            
         }
     }  
     return array;      
@@ -128,13 +129,13 @@ const render = array => {
 
 const main = () => {    
 
-    let newGameArray = createEmptyArray();
+    let newGameArray = createRandomArray();
     
 
-    fillRowsTopTwo(newGameArray);
+    filterRowsTopTwo(newGameArray);
     fillRowsThreeAndBelow(newGameArray);
     console.log(newGameArray);
-    $container.append(render(newGameArray));
+    // $container.append(render(newGameArray));
     
     
     
