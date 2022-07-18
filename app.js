@@ -32,14 +32,21 @@ const createRandomArray = () => {
     return itemMap;        
 }
 // filter the candies
-const filterRowsTopTwo = array => {
-    for (let j = 0; j < 2; j++) {
+const filterRows = array => {
+    for (let j = 0; j < BOARDHEIGHT; j++) {
         for (let i = 0; i < BOARDWIDTH; i++) {
             if (i>=2) {
-                let candyAvailable = CANDIES.map((candy) => candy);
+                let candyAvailable = [];
                 if (array[j][i-2].name === array[j][i-1].name) {
-                    candyAvailable = candyAvailable.filter((candy) => candy.name !== array[j][i-2].name);
-                    // console.log(candyAvailable);
+                    const candyToRemove = array[j][i-2];
+                    console.log(candyToRemove);
+                    for (const candy of CANDIES) {
+                        if (candy !== candyToRemove.name) {
+                            candyAvailable.push(candy);
+                        }
+                    }
+
+                    console.log(candyAvailable);
                     const candyRandom = candyAvailable[Math.floor(Math.random() * candyAvailable.length)];
                     console.log(candyRandom)
                     array[j][i] = new Candy(candyRandom, j, i);
@@ -132,8 +139,8 @@ const main = () => {
     let newGameArray = createRandomArray();
     
 
-    filterRowsTopTwo(newGameArray);
-    fillRowsThreeAndBelow(newGameArray);
+    filterRows(newGameArray);
+    // fillRowsThreeAndBelow(newGameArray);
     console.log(newGameArray);
     // $container.append(render(newGameArray));
     
