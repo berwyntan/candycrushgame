@@ -31,13 +31,56 @@ const checkRow = () => {
                     itemBoard[j][i-2] = "empty";
                     itemBoard[j][i-1] = "empty";
                     itemBoard[j][i] = "empty";
-                    checkCount +=1;
+                    // checkCount +=1;
                     
                 }
             }}
-    setTimeout(() => {render(), 2000});
-            
+    // setTimeout(render, 1000);
+    render();    
 }}
+
+// check col from bottom
+const checkCol = () => {
+    let checkCount = 0;
+    for (let j = BOARDHEIGHT-3; j >=0; j--) {
+        for (let i=0; i < BOARDWIDTH; i++) {
+            if (checkCount < 1) {
+                let candyFirst = itemBoard[j][i];
+                let candySecond = itemBoard[j+1][i];
+                let candyThird = itemBoard[j+2][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                    itemBoard[j][i] = "empty";
+                    itemBoard[j+1][i] = "empty";
+                    itemBoard[j+2][i] = "empty";
+                    // checkCount +=1;
+                    
+                }
+            }}
+    // setTimeout(render, 1000);    
+    render();        
+}}
+
+const refillCandiesBoard = () => {
+    for (let j = 0; j < BOARDHEIGHT; j++) {
+        for (let i = 0; i < BOARDWIDTH; i++) {
+            if (itemBoard[j][i] === "empty") {
+                const candyRandom = CANDIES[Math.floor(Math.random() * CANDIES.length)];
+                itemBoard[j][i] = candyRandom;
+            }}  
+    
+        }
+    render();
+} 
+  
+const newGame = () => {
+    itemBoard = createRandomArray();  
+    for (let i=0; i<10; i++) {
+        checkRow();
+        checkCol();
+        refillCandiesBoard();   
+    }         
+}
+
 
 const gravity = () => {
     for (let j = BOARDHEIGHT-1; j >=1; j--) {
@@ -52,9 +95,10 @@ const gravity = () => {
             }}
 
         }
-    setTimeout(render(), 2000);
+    // setTimeout(render, 2000);
     }
 
+// ---------------------drag and drop
 let dragged;
 
 /* events fired on the draggable target */
@@ -78,6 +122,8 @@ document.addEventListener("dragend", event => {
 document.addEventListener("dragover", event => {
     // prevent default to allow drop
     event.preventDefault();
+    console.log("no dropping")
+    // if id of candy is next to candy being dragged, remove preventDefault
 }, false);
 
 document.addEventListener("dragenter", event => {
@@ -105,6 +151,8 @@ document.addEventListener("drop", event => {
     }
 });
 
+// --------------------------------------------------
+
 const render = () => {
     $container.empty();
     const $gameBoard = $("<div>").addClass("game-board");
@@ -127,12 +175,9 @@ const render = () => {
 
 const main = () => {    
 
-    itemBoard = createRandomArray();
+    newGame();
+    // gravity();    
     console.log(itemBoard);
-    render();
-    checkRow();
-    gravity();
-
 
 }
 
