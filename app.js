@@ -81,6 +81,10 @@ const newGame = () => {
     }         
 }
 
+const checkDroppable = (event) => {
+    const candyId = event.currentTarget.id;
+    console.log(candyId);
+}
 
 const gravity = () => {
     for (let j = BOARDHEIGHT-1; j >=1; j--) {
@@ -99,32 +103,56 @@ const gravity = () => {
     }
 
 // ---------------------drag and drop
-let dragged;
+let $dragged;
+let droppableCandiesArray = [];
 
 /* events fired on the draggable target */
 document.addEventListener("drag", event => {
     console.log("dragging");
+    // const candyId = event.target;
+    // console.log(candyId);
+    
 });
 
 document.addEventListener("dragstart", event => {
     // store a ref. on the dragged elem
-    dragged = event.target;
+    $dragged = $(event.target);
     // make it half transparent
     event.target.classList.add("dragging");
+    // get 
+    console.log(event.target)
+    // get id of dragged candy
+    const candyId = $dragged.attr("id");
+    console.log(candyId);
+    const candyDraggedRow = parseInt(candyId.slice(3, 4));
+    const candyDraggedCol = parseInt(candyId.slice(7, 8));
+    console.log(candyDraggedRow, candyDraggedCol);
+    // calculate id of candy on top of dragged candy
+    const droppableCandyTop = `row${candyDraggedRow-1}col${candyDraggedCol}`;
+    console.log(droppableCandyTop);
+    droppableCandiesArray.push(droppableCandyTop);
+    droppableCandiesArray.forEach(candy => {
+        $(`#${candy}`).addClass("dropzone");
+    })
+
 });
 
 document.addEventListener("dragend", event => {
     // reset the transparency
     event.target.classList.remove("dragging");
+    droppableCandiesArray = [];
+    console.log(droppableCandiesArray)
+    
 });
 
 /* events fired on the drop targets */
 document.addEventListener("dragover", event => {
     // prevent default to allow drop
+    
     event.preventDefault();
-    console.log("no dropping")
+    // console.log("no dropping")
     // if id of candy is next to candy being dragged, remove preventDefault
-}, false);
+});
 
 document.addEventListener("dragenter", event => {
     // highlight potential drop target when the draggable element enters it
@@ -143,11 +171,15 @@ document.addEventListener("dragleave", event => {
 document.addEventListener("drop", event => {
     // prevent default action (open as link for some elements)
     event.preventDefault();
+    const $droppable = $(event.target);
     // move dragged element to the selected drop target
     if (event.target.classList.contains("dropzone")) {
     event.target.classList.remove("dragover");
-    dragged.parentNode.removeChild(dragged);
-    event.target.appendChild(dragged);
+    const candyDroppedOn = $droppable.attr("src")
+    console.log(candyDroppedOn);
+
+    // $dragged.parentNode.removeChild($dragged);
+    // event.target.appendChild($dragged);
     }
 });
 
