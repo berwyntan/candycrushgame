@@ -5,6 +5,14 @@ const $container = $(".container");
 
 let itemBoard = [];
 
+let $dragged;
+let draggedCandyName = "";
+let draggedCandyId = "";
+// array of 4
+let droppableCandiesId = [];
+let droppedCandyName = "";
+let droppedCandyId = "";
+
 const createRandomArray = () => {
     let itemBoard = [];
     for (let j = 0; j < BOARDHEIGHT; j++) {
@@ -86,19 +94,22 @@ const getDroppableCandies = (id) => {
     const candyDraggedRow = parseInt(id.slice(3, 4));
     const candyDraggedCol = parseInt(id.slice(7, 8));
     console.log(candyDraggedRow, candyDraggedCol);
-    // calculate id of candy on top of dragged candy
+    // get candy number of dragged candy
+    draggedCandyName = itemBoard[candyDraggedRow][candyDraggedCol];
+    console.log(draggedCandyName);
+    // calculate id of droppable candy on top of dragged candy
     const droppableCandyTop = `row${candyDraggedRow-1}col${candyDraggedCol}`;
     console.log(droppableCandyTop);
     droppableCandiesId.push(droppableCandyTop);
-    // right candy
+    // right droppable candy
     const droppableCandyRight = `row${candyDraggedRow}col${candyDraggedCol+1}`;
     console.log(droppableCandyRight);
     droppableCandiesId.push(droppableCandyRight);
-    // bottom candy
+    // bottom droppable candy
     const droppableCandyBottom = `row${candyDraggedRow+1}col${candyDraggedCol}`;
     console.log(droppableCandyBottom);
     droppableCandiesId.push(droppableCandyBottom);
-    // left candy
+    // left droppable candy
     const droppableCandyLeft = `row${candyDraggedRow}col${candyDraggedCol-1}`;
     console.log(droppableCandyLeft);
     droppableCandiesId.push(droppableCandyLeft);
@@ -106,7 +117,7 @@ const getDroppableCandies = (id) => {
     droppableCandiesId.forEach(candy => {
         $(`#${candy}`).addClass("dropzone");
     })
-    console.log(droppableCandiesId)
+    console.log(droppableCandiesId);
 }
 
 const gravity = () => {
@@ -126,8 +137,7 @@ const gravity = () => {
     }
 
 // ---------------------drag and drop
-let $dragged;
-let droppableCandiesId = [];
+
 
 /* events fired on the draggable target */
 document.addEventListener("drag", event => {
@@ -145,9 +155,9 @@ document.addEventListener("dragstart", event => {
     // get 
     console.log(event.target)
     // get id of dragged candy
-    const candyId = $dragged.attr("id");
-    console.log(candyId);
-    getDroppableCandies(candyId);
+    draggedCandyId = $dragged.attr("id");
+    console.log(draggedCandyId);
+    getDroppableCandies(draggedCandyId);
     
 
 });
@@ -159,6 +169,7 @@ document.addEventListener("dragend", event => {
         $(`#${candy}`).removeClass("dropzone");
     })
     droppableCandiesId = [];
+    draggedCandyName = "";
     console.log(droppableCandiesId)
     
 });
@@ -194,14 +205,22 @@ document.addEventListener("drop", event => {
     if (event.target.classList.contains("dropzone")) {
     event.target.classList.remove("dragover");
 
-    // need the color of candy AND the coordinates of the drop target
+    // need the name of candy AND the coordinates of the drop target
     // so as to MAP the itemBoard array and then check if any candies get crushed
     // if no candies crushed, nothing happens
     // if candies can be crushed, amend the itemBoard array and then render
-    let candyDroppedOn = $droppable.attr("src")
-    console.log(candyDroppedOn);
-    candyDroppedOn = candyDroppedOn.slice(9, 15);
-    console.log(candyDroppedOn);
+    
+    // get candy name of drop target
+    let candyDroppedOn = $droppable.attr("src");
+    droppedCandyName = candyDroppedOn.slice(9, 15);
+    console.log(droppedCandyName);
+
+    // get id of drop target
+    droppedCandyId = $droppable.attr("id");
+    console.log(droppedCandyId)
+    // const candyDroppedOnRow = candyDroppedOnId.slice(3, 4);
+    // const candyDroppedOnCol = candyDroppedOnId.slice(7, 8);
+    // console.log(candyDroppedOnRow, candyDroppedOnCol);
 
 
     // $dragged.parentNode.removeChild($dragged);
