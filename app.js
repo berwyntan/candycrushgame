@@ -120,6 +120,16 @@ const getDroppableCandies = (id) => {
     console.log(droppableCandiesId);
 }
 
+const checkForCandyCrush = () => {
+    // map current candy array
+    // input in new candy arrnagement and check if any candy gets crushed
+    // create a new function using previous code byt will return
+    // true if candy gets crushed
+    // if true, current array follows mapped array
+    // render
+    // += score
+}
+
 const gravity = () => {
     for (let j = BOARDHEIGHT-1; j >=1; j--) {
         for (let i=0; i < BOARDWIDTH; i++) {
