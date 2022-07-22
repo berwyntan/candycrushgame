@@ -27,43 +27,54 @@ const createRandomArray = () => {
 }
 
 // check row from bottom
-const checkRow = () => {
+const checkRow = (array) => {
     let checkCount = 0;
     for (let j = BOARDHEIGHT-1; j >=0; j--) {
         for (let i=2; i < BOARDWIDTH; i++) {
-            if (checkCount < 1) {
-                let candyFirst = itemBoard[j][i-2];
-                let candySecond = itemBoard[j][i-1];
-                let candyThird = itemBoard[j][i];
+            if (checkCount >= 0) {
+                let candyFirst = array[j][i-2];
+                let candySecond = array[j][i-1];
+                let candyThird = array[j][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                    itemBoard[j][i-2] = "empty";
-                    itemBoard[j][i-1] = "empty";
-                    itemBoard[j][i] = "empty";
-                    // checkCount +=1;                    
+                    array[j][i-2] = "empty";
+                    array[j][i-1] = "empty";
+                    array[j][i] = "empty";
+                    checkCount +=1;                    
                 }
             }}
-    // setTimeout(render, 1000);
-    render();    
+    
+    if (array===itemBoard) {
+        render();  
+    }
+    if (checkCount>0) {
+        return true;
+    }
+        
 }}
 
 // check col from bottom
-const checkCol = () => {
+const checkCol = (array) => {
     let checkCount = 0;
     for (let j = BOARDHEIGHT-3; j >=0; j--) {
         for (let i=0; i < BOARDWIDTH; i++) {
-            if (checkCount < 1) {
-                let candyFirst = itemBoard[j][i];
-                let candySecond = itemBoard[j+1][i];
-                let candyThird = itemBoard[j+2][i];
+            if (checkCount >= 0) {
+                let candyFirst = array[j][i];
+                let candySecond = array[j+1][i];
+                let candyThird = array[j+2][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                    itemBoard[j][i] = "empty";
-                    itemBoard[j+1][i] = "empty";
-                    itemBoard[j+2][i] = "empty";
-                    // checkCount +=1;                    
+                    array[j][i] = "empty";
+                    array[j+1][i] = "empty";
+                    array[j+2][i] = "empty";
+                    checkCount +=1;                    
                 }
             }}
     // setTimeout(render, 1000);    
-    render();        
+    if (array===itemBoard) {
+        render();  
+    }    
+    if (checkCount>0) {
+        return true;
+    } 
 }}
 
 const refillCandiesBoard = () => {
@@ -81,8 +92,8 @@ const refillCandiesBoard = () => {
 const newGame = () => {
     itemBoard = createRandomArray();  
     for (let i=0; i<10; i++) {
-        checkRow();
-        checkCol();
+        checkRow(itemBoard);
+        checkCol(itemBoard);
         refillCandiesBoard();   
     }   
     console.log(itemBoard);      
@@ -144,13 +155,25 @@ const checkForCandyCrush = () => {
     checkingArray[candy2Row][candy2Col] = candy2Name;
     console.log(checkingArray);
     // create a new function using previous code byt will return
+    // UPDATE: modified existing fn
     // true if candy gets crushed
-    // if true, current array follows mapped array
-    // render
+    if (checkRow(checkingArray) === true || checkCol(checkingArray) === true) {
+        // if true, current array follows mapped array
+        itemBoard = checkingArray;
+        render();
+        setTimeout(gravity, 2000);
+        
+        setTimeout(refillCandiesBoard, 4000);           
+        setTimeout(checkForCandyCrush, 8000);
+    }
+      
+    
     // += score
 }
 
 const gravity = () => {
+    // need to compare rows for 'empty' then push rows down
+    // maybe using some callback?
     for (let j = BOARDHEIGHT-1; j >=1; j--) {
         for (let i=0; i < BOARDWIDTH; i++) {
             let candy = itemBoard[j][i];
@@ -164,6 +187,7 @@ const gravity = () => {
 
         }
     // setTimeout(render, 2000);
+    render();
     }
 
 // ---------------------drag and drop
