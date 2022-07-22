@@ -28,56 +28,46 @@ const main = () => {
     }
 
     // check row from bottom
-    const checkRow = (array) => {
-        let checkCount = 0;
+    const checkRow = () => {
+        
         for (let j = BOARDHEIGHT-1; j >=0; j--) {
             for (let i=2; i < BOARDWIDTH; i++) {
-                if (checkCount >= 0) {
-                    let candyFirst = array[j][i-2];
-                    let candySecond = array[j][i-1];
-                    let candyThird = array[j][i];
-                    if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                        array[j][i-2] = "empty";
-                        array[j][i-1] = "empty";
-                        array[j][i] = "empty";
-                        checkCount +=1;                    
-                    }
-                }}
+                
+                let candyFirst = itemBoard[j][i-2];
+                let candySecond = itemBoard[j][i-1];
+                let candyThird = itemBoard[j][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                    itemBoard[j][i-2] = "empty";
+                    itemBoard[j][i-1] = "empty";
+                    itemBoard[j][i] = "empty";
+                    
+                    // console.log("row " + j + "crushed");                  
+                }
+            }}        
         
-        if (array===itemBoard) {
-            render();  
-            console.log("testing")
-        }
-        if (checkCount>0) {
-            return true;
-        }
+        render();       
             
-    }}
+    }
 
     // check col from bottom
-    const checkCol = (array) => {
-        let checkCount = 0;
+    const checkCol = () => {
+        
         for (let j = BOARDHEIGHT-3; j >=0; j--) {
             for (let i=0; i < BOARDWIDTH; i++) {
-                if (checkCount >= 0) {
-                    let candyFirst = array[j][i];
-                    let candySecond = array[j+1][i];
-                    let candyThird = array[j+2][i];
-                    if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                        array[j][i] = "empty";
-                        array[j+1][i] = "empty";
-                        array[j+2][i] = "empty";
-                        checkCount +=1;                    
-                    }
-                }}
-        // setTimeout(render, 1000);    
-        if (array===itemBoard) {
-            render();  
-        }    
-        if (checkCount>0) {
-            return true;
-        } 
-    }}
+                
+                let candyFirst = itemBoard[j][i];
+                let candySecond = itemBoard[j+1][i];
+                let candyThird = itemBoard[j+2][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                    itemBoard[j][i] = "empty";
+                    itemBoard[j+1][i] = "empty";
+                    itemBoard[j+2][i] = "empty";
+                    // console.log("column " + i + "crushed");                    
+                }
+            }}
+         
+        render();        
+    }
 
     const refillCandiesBoard = () => {
         for (let j = 0; j < BOARDHEIGHT; j++) {
@@ -94,11 +84,10 @@ const main = () => {
     const newGame = () => {
         itemBoard = createRandomArray();  
         for (let i=0; i<10; i++) {
-            checkRow(itemBoard);
-            checkCol(itemBoard);
+            checkRow();
+            checkCol();
             refillCandiesBoard();   
-        }   
-        console.log(itemBoard);      
+        }              
     }
 
     const sliceRowNumberFromId = id => {
@@ -112,35 +101,36 @@ const main = () => {
     const getDroppableCandies = id => {
         const candyDraggedRow = sliceRowNumberFromId(id);
         const candyDraggedCol = sliceColNumberFromId(id);
-        console.log(candyDraggedRow, candyDraggedCol);
+        // console.log("dragged candy: " + candyDraggedRow, candyDraggedCol);
         // get candy number of dragged candy
         draggedCandyName = itemBoard[candyDraggedRow][candyDraggedCol];
-        console.log(draggedCandyName);
+        console.log("dragged candy name: " + draggedCandyName);
         // calculate id of droppable candy on top of dragged candy
         const droppableCandyTop = `row${candyDraggedRow-1}col${candyDraggedCol}`;
-        console.log(droppableCandyTop);
+        // console.log(droppableCandyTop);
         droppableCandiesId.push(droppableCandyTop);
         // right droppable candy
         const droppableCandyRight = `row${candyDraggedRow}col${candyDraggedCol+1}`;
-        console.log(droppableCandyRight);
+        // console.log(droppableCandyRight);
         droppableCandiesId.push(droppableCandyRight);
         // bottom droppable candy
         const droppableCandyBottom = `row${candyDraggedRow+1}col${candyDraggedCol}`;
-        console.log(droppableCandyBottom);
+        // console.log(droppableCandyBottom);
         droppableCandiesId.push(droppableCandyBottom);
         // left droppable candy
         const droppableCandyLeft = `row${candyDraggedRow}col${candyDraggedCol-1}`;
-        console.log(droppableCandyLeft);
+        // console.log(droppableCandyLeft);
         droppableCandiesId.push(droppableCandyLeft);
 
         droppableCandiesId.forEach(candy => {
             $(`#${candy}`).addClass("dropzone");
         })
-        console.log(droppableCandiesId);
+        console.log("drop targets: " + droppableCandiesId);
     }
 
     const checkForCandyCrush = () => {
         // map current candy array
+        console.log("checking for crush");
         const checkingArray = itemBoard.map(candy=>candy);
         // input in new candy arrnagement and check if any candy gets crushed
         // candy1 is the dragged candy
@@ -155,18 +145,53 @@ const main = () => {
         // update the checking Array
         checkingArray[candy1Row][candy1Col] = candy1Name;
         checkingArray[candy2Row][candy2Col] = candy2Name;
-        console.log(checkingArray);
+        // check rows
+        for (let j = BOARDHEIGHT-1; j >=0; j--) {
+            for (let i=2; i < BOARDWIDTH; i++) {
+                
+                let candyFirst = checkingArray[j][i-2];
+                let candySecond = checkingArray[j][i-1];
+                let candyThird = checkingArray[j][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                    // checkingArray[j][i-2] = "empty";
+                    // checkingArray[j][i-1] = "empty";
+                    // checkingArray[j][i] = "empty";
+                    
+                    console.log("row " + j + "crushed, but need to render change");    
+                    itemBoard = checkingArray;
+                    render();              
+                }
+            }} 
+            // check col
+            for (let j = BOARDHEIGHT-3; j >=0; j--) {
+                for (let i=0; i < BOARDWIDTH; i++) {
+                    
+                    let candyFirst = checkingArray[j][i];
+                    let candySecond = checkingArray[j+1][i];
+                    let candyThird = checkingArray[j+2][i];
+                    if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                        // checkingArray[j][i] = "empty";
+                        // checkingArray[j+1][i] = "empty";
+                        // checkingArray[j+2][i] = "empty";
+                        console.log("column " + i + "crushed, but need to render"); 
+                        itemBoard = checkingArray;
+                        render();                   
+                    }
+                }}
+              
+        
+         
 
         // need to separate checkrow fn into 2: one for game start and one for game mid
-        if (checkRow(checkingArray) === true && checkCol(checkingArray) === true
-            || checkCol(checkingArray) === true || checkRow(checkingArray) === true) {
+        // if (checkRow(checkingArray) === true && checkCol(checkingArray) === true
+        //     || checkCol(checkingArray) === true || checkRow(checkingArray) === true) {
             
-            itemBoard = checkingArray;
-            render();
-            setTimeout(gravity, 2000);            
-            setTimeout(refillCandiesBoard, 4000);           
-            setTimeout(checkForCandyCrush, 8000);
-        }
+        //     itemBoard = checkingArray;
+        //     render();
+        //     setTimeout(gravity, 2000);            
+        //     setTimeout(refillCandiesBoard, 4000);           
+        //     setTimeout(checkForCandyCrush, 8000);
+        // }
         
         
         // += score
@@ -208,10 +233,10 @@ const main = () => {
         // make it half transparent
         event.target.classList.add("dragging");
         // get 
-        console.log(event.target)
+        // console.log(event.target)
         // get id of dragged candy
         draggedCandyId = $dragged.attr("id");
-        console.log(draggedCandyId);
+        console.log("dragging candy " + draggedCandyId);
         getDroppableCandies(draggedCandyId);
         
 
@@ -225,7 +250,8 @@ const main = () => {
         })
         droppableCandiesId = [];
         draggedCandyName = "";
-        console.log(droppableCandiesId)
+        console.log("drop targets: " + droppableCandiesId)
+        console.log("dragged candy name: " + draggedCandyName)
         
     });
 
@@ -268,13 +294,13 @@ const main = () => {
         // get candy name of drop target
         let candyDroppedOn = $droppable.attr("src");
         droppedCandyName = candyDroppedOn.slice(9, 15);
-        console.log(droppedCandyName);
+        console.log("dropped onto " + droppedCandyName);
 
         // get id of drop target
         droppedCandyId = $droppable.attr("id");
-        console.log(droppedCandyId)
-        droppableCandiesId = [];
-        console.log(droppableCandiesId);
+        console.log("dropped onto: " + droppedCandyId)
+        // droppableCandiesId = [];
+        // console.log("drop targets: " + droppableCandiesId);
         checkForCandyCrush();
 
 
