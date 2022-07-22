@@ -39,8 +39,7 @@ const checkRow = () => {
                     itemBoard[j][i-2] = "empty";
                     itemBoard[j][i-1] = "empty";
                     itemBoard[j][i] = "empty";
-                    // checkCount +=1;
-                    
+                    // checkCount +=1;                    
                 }
             }}
     // setTimeout(render, 1000);
@@ -60,8 +59,7 @@ const checkCol = () => {
                     itemBoard[j][i] = "empty";
                     itemBoard[j+1][i] = "empty";
                     itemBoard[j+2][i] = "empty";
-                    // checkCount +=1;
-                    
+                    // checkCount +=1;                    
                 }
             }}
     // setTimeout(render, 1000);    
@@ -90,9 +88,17 @@ const newGame = () => {
     console.log(itemBoard);      
 }
 
-const getDroppableCandies = (id) => {
-    const candyDraggedRow = parseInt(id.slice(3, 4));
-    const candyDraggedCol = parseInt(id.slice(7, 8));
+const sliceRowNumberFromId = id => {
+    return parseInt(id.slice(3, 4));
+}
+
+const sliceColNumberFromId = id => {
+    return parseInt(id.slice(7, 8));
+}
+
+const getDroppableCandies = id => {
+    const candyDraggedRow = sliceRowNumberFromId(id);
+    const candyDraggedCol = sliceColNumberFromId(id);
     console.log(candyDraggedRow, candyDraggedCol);
     // get candy number of dragged candy
     draggedCandyName = itemBoard[candyDraggedRow][candyDraggedCol];
@@ -122,7 +128,21 @@ const getDroppableCandies = (id) => {
 
 const checkForCandyCrush = () => {
     // map current candy array
+    const checkingArray = itemBoard.map(candy=>candy);
     // input in new candy arrnagement and check if any candy gets crushed
+    // candy1 is the dragged candy
+    let candy1Row = sliceRowNumberFromId(draggedCandyId);
+    let candy1Col = sliceColNumberFromId(draggedCandyId);
+    // candy2 is the candy being dropped on
+    let candy2Row = sliceRowNumberFromId(droppedCandyId);
+    let candy2Col = sliceColNumberFromId(droppedCandyId);
+    // swop the candy names
+    const candy1Name = droppedCandyName;
+    const candy2Name = draggedCandyName;
+    // update the checking Array
+    checkingArray[candy1Row][candy1Col] = candy1Name;
+    checkingArray[candy2Row][candy2Col] = candy2Name;
+    console.log(checkingArray);
     // create a new function using previous code byt will return
     // true if candy gets crushed
     // if true, current array follows mapped array
@@ -228,9 +248,7 @@ document.addEventListener("drop", event => {
     // get id of drop target
     droppedCandyId = $droppable.attr("id");
     console.log(droppedCandyId)
-    // const candyDroppedOnRow = candyDroppedOnId.slice(3, 4);
-    // const candyDroppedOnCol = candyDroppedOnId.slice(7, 8);
-    // console.log(candyDroppedOnRow, candyDroppedOnCol);
+    checkForCandyCrush();
 
 
     // $dragged.parentNode.removeChild($dragged);
@@ -264,7 +282,7 @@ const main = () => {
 
     newGame();
     // gravity();    
-    console.log(itemBoard);
+    
 
 }
 
