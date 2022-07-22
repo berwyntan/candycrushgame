@@ -14,3 +14,7 @@ img {
     
     width: 400px;
 }
+
+.crush {
+    filter: saturate(5);
+}

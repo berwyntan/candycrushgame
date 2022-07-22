@@ -14,6 +14,8 @@ const main = () => {
     let droppedCandyName = "";
     let droppedCandyId = "";
 
+    let candyToCrush = [];
+
     const createRandomArray = () => {
         let itemBoard = [];
         for (let j = 0; j < BOARDHEIGHT; j++) {
@@ -52,16 +54,16 @@ const main = () => {
     // check col from bottom
     const checkCol = () => {
         
-        for (let j = BOARDHEIGHT-3; j >=0; j--) {
+        for (let j = BOARDHEIGHT-1; j >=2; j--) {
             for (let i=0; i < BOARDWIDTH; i++) {
                 
                 let candyFirst = itemBoard[j][i];
-                let candySecond = itemBoard[j+1][i];
-                let candyThird = itemBoard[j+2][i];
+                let candySecond = itemBoard[j-1][i];
+                let candyThird = itemBoard[j-2][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
                     itemBoard[j][i] = "empty";
-                    itemBoard[j+1][i] = "empty";
-                    itemBoard[j+2][i] = "empty";
+                    itemBoard[j-1][i] = "empty";
+                    itemBoard[j-2][i] = "empty";
                     // console.log("column " + i + "crushed");                    
                 }
             }}
@@ -156,23 +158,35 @@ const main = () => {
                     // checkingArray[j][i-2] = "empty";
                     // checkingArray[j][i-1] = "empty";
                     // checkingArray[j][i] = "empty";
+                    candyToCrush.push(
+                        `row${j}col${i-2}`,
+                        `row${j}col${i-1}`,
+                        `row${j}col${i}`,
+                    )
                     
-                    console.log("row " + j + "crushed, but need to render change");    
+                    console.log("row " + j + "crushed, but need to render change"); 
+                    console.log("candies to crush: " + candyToCrush);   
                     itemBoard = checkingArray;
                     render();              
                 }
             }} 
             // check col
-            for (let j = BOARDHEIGHT-3; j >=0; j--) {
+            for (let j = BOARDHEIGHT-1; j >=2; j--) {
                 for (let i=0; i < BOARDWIDTH; i++) {
                     
                     let candyFirst = checkingArray[j][i];
-                    let candySecond = checkingArray[j+1][i];
-                    let candyThird = checkingArray[j+2][i];
+                    let candySecond = checkingArray[j-1][i];
+                    let candyThird = checkingArray[j-2][i];
                     if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
                         // checkingArray[j][i] = "empty";
-                        // checkingArray[j+1][i] = "empty";
-                        // checkingArray[j+2][i] = "empty";
+                        // checkingArray[j-1][i] = "empty";
+                        // checkingArray[j-2][i] = "empty";
+                        candyToCrush.push(
+                            `row${j}col${i}`,
+                            `row${j-1}col${i}`,
+                            `row${j-2}col${i}`,
+                        )
+
                         console.log("column " + i + "crushed, but need to render"); 
                         itemBoard = checkingArray;
                         render();                   
@@ -324,6 +338,12 @@ const main = () => {
                 $candy.attr("draggable", "true");
                 
                 $row.append($candy);
+
+                candyToCrush.forEach(candy => {
+                    if (candy === $candy.attr("id")) {
+                        $candy.addClass("crush");
+                    }
+                })
             }
             $gameBoard.append($row);
         }
