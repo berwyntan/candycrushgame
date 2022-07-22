@@ -16,5 +16,5 @@ img {
 }
 
 .crush {
-    filter: saturate(5);
+    filter: hue-rotate(200deg);
 }

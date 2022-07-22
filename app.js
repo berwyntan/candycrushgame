@@ -170,31 +170,35 @@ const main = () => {
                     render();              
                 }
             }} 
-            // check col
-            for (let j = BOARDHEIGHT-1; j >=2; j--) {
-                for (let i=0; i < BOARDWIDTH; i++) {
-                    
-                    let candyFirst = checkingArray[j][i];
-                    let candySecond = checkingArray[j-1][i];
-                    let candyThird = checkingArray[j-2][i];
-                    if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                        // checkingArray[j][i] = "empty";
-                        // checkingArray[j-1][i] = "empty";
-                        // checkingArray[j-2][i] = "empty";
-                        candyToCrush.push(
-                            `row${j}col${i}`,
-                            `row${j-1}col${i}`,
-                            `row${j-2}col${i}`,
-                        )
+        // check col
+        for (let j = BOARDHEIGHT-1; j >=2; j--) {
+            for (let i=0; i < BOARDWIDTH; i++) {
+                
+                let candyFirst = checkingArray[j][i];
+                let candySecond = checkingArray[j-1][i];
+                let candyThird = checkingArray[j-2][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                    // checkingArray[j][i] = "empty";
+                    // checkingArray[j-1][i] = "empty";
+                    // checkingArray[j-2][i] = "empty";
+                    candyToCrush.push(
+                        `row${j}col${i}`,
+                        `row${j-1}col${i}`,
+                        `row${j-2}col${i}`,
+                    )
 
-                        console.log("column " + i + "crushed, but need to render"); 
-                        itemBoard = checkingArray;
-                        render();                   
-                    }
-                }}
-              
+                    console.log("column " + i + "crushed, but need to render"); 
+                    console.log("candies to crush: " + candyToCrush);  
+                    itemBoard = checkingArray;
+                    render();                   
+                }
+            }}
+        crushCandies();
+        }          
         
-         
+        const crushCandies = () => {
+            console.log("crushing candies");
+        } 
 
         // need to separate checkrow fn into 2: one for game start and one for game mid
         // if (checkRow(checkingArray) === true && checkCol(checkingArray) === true
@@ -209,7 +213,7 @@ const main = () => {
         
         
         // += score
-    }
+    
 
     const gravity = () => {
         // need to compare rows for 'empty' then push rows down
