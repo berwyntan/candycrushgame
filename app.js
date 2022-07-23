@@ -16,7 +16,7 @@ const main = () => {
     let droppedCandyName = "";
     let droppedCandyId = "";
 
-    let candyToCrush = [];
+    let candiesToCrush = [];
 
     const createRandomArray = () => {
         let itemBoard = [];
@@ -164,14 +164,14 @@ const main = () => {
                     // checkingArray[j][i-2] = "empty";
                     // checkingArray[j][i-1] = "empty";
                     // checkingArray[j][i] = "empty";
-                    candyToCrush.push(
+                    candiesToCrush.push(
                         `row${j}col${i-2}`,
                         `row${j}col${i-1}`,
                         `row${j}col${i}`,
                     )
                     
                     console.log("row " + j + "crushed, but need to render change"); 
-                    console.log("candies to crush: " + candyToCrush);   
+                    console.log("candies to crush: " + candiesToCrush);   
                     itemBoard = checkingArray;
                     render();              
                 }
@@ -187,24 +187,29 @@ const main = () => {
                     // checkingArray[j][i] = "empty";
                     // checkingArray[j-1][i] = "empty";
                     // checkingArray[j-2][i] = "empty";
-                    candyToCrush.push(
+                    candiesToCrush.push(
                         `row${j}col${i}`,
                         `row${j-1}col${i}`,
                         `row${j-2}col${i}`,
                     )
 
                     console.log("column " + i + "crushed, but need to render"); 
-                    console.log("candies to crush: " + candyToCrush);  
+                    console.log("candies to crush: " + candiesToCrush);  
                     itemBoard = checkingArray;
                     render();                   
                 }
             }}
-        crushCandies();
+        setTimeout(crushCandies, 1200);
         }          
         
-        const crushCandies = () => {
-            console.log("crushing candies");
-        } 
+    const crushCandies = () => {
+        console.log("crushing candies");
+        console.log(candiesToCrush);
+        candiesToCrush.forEach(candy => {
+            const candyRow = sliceRowNumberFromId(candy);
+            const candyCol = sliceColNumberFromId(candy);
+        })
+    } 
 
         
     
@@ -326,7 +331,7 @@ const main = () => {
                 
                 $row.append($candy);
 
-                candyToCrush.forEach(candy => {
+                candiesToCrush.forEach(candy => {
                     if (candy === $candy.attr("id")) {
                         $candy.addClass("crush");
                     }
