@@ -84,7 +84,7 @@ const main = () => {
     }
 
     // replaced crushed 
-    const refillCandiesBoard = () => {
+    const refillCandiesBoardNewGameOnly = () => {
         for (let j = 0; j < BOARDHEIGHT; j++) {
             for (let i = 0; i < BOARDWIDTH; i++) {
                 if (itemBoard[j][i] === "empty") {
@@ -94,6 +94,24 @@ const main = () => {
         
             }
         render();
+        console.log("replaced crushed candies - new game")
+        // setTimeout(checkForCandyCrush, 1200);
+    } 
+
+    const crushCandiesNewGameOnly = () => {
+        console.log("crushing candies: " + candiesToCrush);
+        candiesToCrush.forEach(candy => {
+            const candyRow = sliceRowNumberFromId(candy);
+            const candyCol = sliceColNumberFromId(candy);
+            itemBoard[candyRow][candyCol] = "empty";
+        })
+        candiesToCrush = [];
+        // console.log("cleared: candies to crush array " + candiesToCrush)
+        render();
+        // console.log("itemBoard: ")
+        console.log("crushed candies: new game")
+        
+        // gravity();        
     } 
     
     const newGame = () => {
@@ -101,9 +119,9 @@ const main = () => {
         for (let i=0; i<10; i++) {
             checkRow();
             checkCol();
-            crushCandies();
+            crushCandiesNewGameOnly();
             // checkForCandyCrush();
-            refillCandiesBoard();   
+            refillCandiesBoardNewGameOnly();   
         }              
     }
 
@@ -155,32 +173,32 @@ const main = () => {
         // input in new candy arrnagement and check if any candy gets crushed
         // candy1 is the dragged candy
 
-        // if (draggedCandyId !== "") {
-        //     let candy1Row = sliceRowNumberFromId(draggedCandyId);
-        //     let candy1Col = sliceColNumberFromId(draggedCandyId);
-        //     // candy2 is the candy being dropped on
-        //     let candy2Row = sliceRowNumberFromId(droppedCandyId);
-        //     let candy2Col = sliceColNumberFromId(droppedCandyId);
-        //     // swop the candy names
-        //     const candy1Name = droppedCandyName;
-        //     const candy2Name = draggedCandyName;
-        //     // update the checking Array
-        //     checkingArray[candy1Row][candy1Col] = candy1Name;
-        //     checkingArray[candy2Row][candy2Col] = candy2Name;
+        if (draggedCandyId !== "") {
+            let candy1Row = sliceRowNumberFromId(draggedCandyId);
+            let candy1Col = sliceColNumberFromId(draggedCandyId);
+            // candy2 is the candy being dropped on
+            let candy2Row = sliceRowNumberFromId(droppedCandyId);
+            let candy2Col = sliceColNumberFromId(droppedCandyId);
+            // swop the candy names
+            const candy1Name = droppedCandyName;
+            const candy2Name = draggedCandyName;
+            // update the checking Array
+            checkingArray[candy1Row][candy1Col] = candy1Name;
+            checkingArray[candy2Row][candy2Col] = candy2Name;
 
-        // }
+        }
 
-        let candy1Row = sliceRowNumberFromId(draggedCandyId);
-        let candy1Col = sliceColNumberFromId(draggedCandyId);
-        // candy2 is the candy being dropped on
-        let candy2Row = sliceRowNumberFromId(droppedCandyId);
-        let candy2Col = sliceColNumberFromId(droppedCandyId);
-        // swop the candy names
-        const candy1Name = droppedCandyName;
-        const candy2Name = draggedCandyName;
-        // update the checking Array
-        checkingArray[candy1Row][candy1Col] = candy1Name;
-        checkingArray[candy2Row][candy2Col] = candy2Name;
+        // let candy1Row = sliceRowNumberFromId(draggedCandyId);
+        // let candy1Col = sliceColNumberFromId(draggedCandyId);
+        // // candy2 is the candy being dropped on
+        // let candy2Row = sliceRowNumberFromId(droppedCandyId);
+        // let candy2Col = sliceColNumberFromId(droppedCandyId);
+        // // swop the candy names
+        // const candy1Name = droppedCandyName;
+        // const candy2Name = draggedCandyName;
+        // // update the checking Array
+        // checkingArray[candy1Row][candy1Col] = candy1Name;
+        // checkingArray[candy2Row][candy2Col] = candy2Name;
 
 
         // check rows
@@ -239,10 +257,11 @@ const main = () => {
         if (candiesToCrush.length>2) {
             itemBoard = checkingArray;
             render();
+            setTimeout(crushCandies, 1500);
         }
         
         // crushCandies();
-        setTimeout(crushCandies, 1500);
+        // setTimeout(crushCandies, 1500);
         }          
         
     const crushCandies = () => {
@@ -253,27 +272,27 @@ const main = () => {
             itemBoard[candyRow][candyCol] = "empty";
         })
         candiesToCrush = [];
-        console.log("cleared candies to crush array " + candiesToCrush)
+        console.log("cleared: candies to crush array " + candiesToCrush)
         render();
-        console.log("itemBoard: ")
-        console.log(itemBoard)
+        // console.log("itemBoard: ")
+        // console.log(itemBoard)
         
-        gravity();
+        gravity();        
     } 
 
         
     
     // pushes candies to the 'floor'   
     const gravity = () => {
-        console.log("gravity board: ")
+        // console.log("gravity board: ")
         // map the itemBoard
         const gravityBoard = itemBoard.map(candy => candy);
-        console.log(gravityBoard);
+        // console.log(gravityBoard);
         // use 'some' callback to check for empty in row UPDATE: used for loop
         for (let k=0; k<BOARDHEIGHT-1; k++) {
             for (let j=BOARDHEIGHT-1; j>=1; j--) {
                 for (let i=0; i<BOARDWIDTH; i++) {
-                    console.log("iteration: " + k + ", row: " + j + ", col: " + i);
+                    // console.log("iteration: " + k + ", row: " + j + ", col: " + i);
                     const candyToCheck = gravityBoard[j][i];
                     const candyAbove = gravityBoard[j-1][i];
                     // if true, find the empty slot and slot above
@@ -286,13 +305,27 @@ const main = () => {
             }
         }
         // repeat for all until only the top row is empty      
-        console.log(gravityBoard);
+        // console.log(gravityBoard);
         // itemboard copys the mapped array
         itemBoard = gravityBoard;
         render();
         // refill candies board
+        setTimeout(refillCandiesBoard, 1500);
+    }
+
+    const refillCandiesBoard = () => {
+        for (let j = 0; j < BOARDHEIGHT; j++) {
+            for (let i = 0; i < BOARDWIDTH; i++) {
+                if (itemBoard[j][i] === "empty") {
+                    const candyRandom = CANDIES[Math.floor(Math.random() * CANDIES.length)];
+                    itemBoard[j][i] = candyRandom;
+                }}  
         
-        }
+            }
+        render();
+        console.log("replaced crushed candies")
+        setTimeout(checkForCandyCrush, 1200);
+    } 
 
     // drag and drop code adapted from MDN
 
@@ -331,8 +364,13 @@ const main = () => {
 
     /* events fired on the drop targets */
     document.addEventListener("dragover", event => {
-        // prevent default to allow drop        
-        event.preventDefault();
+        // prevent default to allow drop 
+        
+        if (event.target.classList.contains("dropzone")) {
+            // event.target.classList.add("dragover");
+
+
+            event.preventDefault();}
         // if id of candy is next to candy being dragged, remove preventDefault
     });
 
