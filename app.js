@@ -41,9 +41,14 @@ const main = () => {
                 let candySecond = itemBoard[j][i-1];
                 let candyThird = itemBoard[j][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                    itemBoard[j][i-2] = "empty";
-                    itemBoard[j][i-1] = "empty";
-                    itemBoard[j][i] = "empty";
+                    // itemBoard[j][i-2] = "empty";
+                    // itemBoard[j][i-1] = "empty";
+                    // itemBoard[j][i] = "empty";
+                    candiesToCrush.push(
+                        `row${j}col${i-2}`,
+                        `row${j}col${i-1}`,
+                        `row${j}col${i}`,
+                    );
                     
                     // console.log("row " + j + "crushed");                  
                 }
@@ -63,9 +68,14 @@ const main = () => {
                 let candySecond = itemBoard[j-1][i];
                 let candyThird = itemBoard[j-2][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                    itemBoard[j][i] = "empty";
-                    itemBoard[j-1][i] = "empty";
-                    itemBoard[j-2][i] = "empty";
+                    // itemBoard[j][i] = "empty";
+                    // itemBoard[j-1][i] = "empty";
+                    // itemBoard[j-2][i] = "empty";
+                    candiesToCrush.push(
+                        `row${j}col${i}`,
+                        `row${j-1}col${i}`,
+                        `row${j-2}col${i}`,
+                    );
                     // console.log("column " + i + "crushed");                    
                 }
             }}
@@ -91,6 +101,7 @@ const main = () => {
         for (let i=0; i<10; i++) {
             checkRow();
             checkCol();
+            crushCandies();
             refillCandiesBoard();   
         }              
     }
@@ -208,7 +219,11 @@ const main = () => {
         candiesToCrush.forEach(candy => {
             const candyRow = sliceRowNumberFromId(candy);
             const candyCol = sliceColNumberFromId(candy);
+            itemBoard[candyRow][candyCol] = "empty";
         })
+        candiesToCrush = [];
+        console.log("cleared candies to crush: " + candiesToCrush)
+        render();
     } 
 
         
