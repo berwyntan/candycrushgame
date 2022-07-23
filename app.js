@@ -1,4 +1,6 @@
 const main = () => { 
+
+    // -------------------------------- MODEL -------------------------------------
     const BOARDWIDTH = 6;
     const BOARDHEIGHT = 6;
     const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
@@ -29,7 +31,7 @@ const main = () => {
         return itemBoard;        
     }
 
-    // check row from bottom
+    // check rows from bottom row
     const checkRow = () => {
         
         for (let j = BOARDHEIGHT-1; j >=0; j--) {
@@ -51,7 +53,7 @@ const main = () => {
             
     }
 
-    // check col from bottom
+    // check col from bottom row
     const checkCol = () => {
         
         for (let j = BOARDHEIGHT-1; j >=2; j--) {
@@ -71,6 +73,7 @@ const main = () => {
         render();        
     }
 
+    // replaced crushed 
     const refillCandiesBoard = () => {
         for (let j = 0; j < BOARDHEIGHT; j++) {
             for (let i = 0; i < BOARDWIDTH; i++) {
@@ -92,6 +95,8 @@ const main = () => {
         }              
     }
 
+    // ------------------------------------ CONTROLLER ---------------------------------------
+
     const sliceRowNumberFromId = id => {
         return parseInt(id.slice(3, 4));
     }
@@ -100,6 +105,7 @@ const main = () => {
         return parseInt(id.slice(7, 8));
     }
 
+    //get drop targets
     const getDroppableCandies = id => {
         const candyDraggedRow = sliceRowNumberFromId(id);
         const candyDraggedCol = sliceColNumberFromId(id);
@@ -109,20 +115,19 @@ const main = () => {
         console.log("dragged candy name: " + draggedCandyName);
         // calculate id of droppable candy on top of dragged candy
         const droppableCandyTop = `row${candyDraggedRow-1}col${candyDraggedCol}`;
-        // console.log(droppableCandyTop);
-        droppableCandiesId.push(droppableCandyTop);
         // right droppable candy
         const droppableCandyRight = `row${candyDraggedRow}col${candyDraggedCol+1}`;
-        // console.log(droppableCandyRight);
-        droppableCandiesId.push(droppableCandyRight);
         // bottom droppable candy
         const droppableCandyBottom = `row${candyDraggedRow+1}col${candyDraggedCol}`;
-        // console.log(droppableCandyBottom);
-        droppableCandiesId.push(droppableCandyBottom);
         // left droppable candy
         const droppableCandyLeft = `row${candyDraggedRow}col${candyDraggedCol-1}`;
-        // console.log(droppableCandyLeft);
-        droppableCandiesId.push(droppableCandyLeft);
+        
+        droppableCandiesId.push(
+            droppableCandyTop, 
+            droppableCandyRight, 
+            droppableCandyBottom, 
+            droppableCandyLeft
+            );
 
         droppableCandiesId.forEach(candy => {
             $(`#${candy}`).addClass("dropzone");
@@ -130,6 +135,7 @@ const main = () => {
         console.log("drop targets: " + droppableCandiesId);
     }
 
+    // check for 3 or 4 in a row or col
     const checkForCandyCrush = () => {
         // map current candy array
         console.log("checking for crush");
@@ -200,21 +206,9 @@ const main = () => {
             console.log("crushing candies");
         } 
 
-        // need to separate checkrow fn into 2: one for game start and one for game mid
-        // if (checkRow(checkingArray) === true && checkCol(checkingArray) === true
-        //     || checkCol(checkingArray) === true || checkRow(checkingArray) === true) {
-            
-        //     itemBoard = checkingArray;
-        //     render();
-        //     setTimeout(gravity, 2000);            
-        //     setTimeout(refillCandiesBoard, 4000);           
-        //     setTimeout(checkForCandyCrush, 8000);
-        // }
         
-        
-        // += score
     
-
+    // pushes candies to the 'floor'   
     const gravity = () => {
         // need to compare rows for 'empty' then push rows down
         // maybe using some callback?
@@ -234,15 +228,12 @@ const main = () => {
         render();
         }
 
-    // ---------------------drag and drop
-
+    // drag and drop code adapted from MDN
 
     /* events fired on the draggable target */
     document.addEventListener("drag", event => {
         // console.log("dragging");
-        // const candyId = event.target;
-        // console.log(candyId);
-        
+        // const candyId = event.target;             
     });
 
     document.addEventListener("dragstart", event => {
@@ -250,7 +241,6 @@ const main = () => {
         $dragged = $(event.target);
         // make it half transparent
         event.target.classList.add("dragging");
-        // get 
         // console.log(event.target)
         // get id of dragged candy
         draggedCandyId = $dragged.attr("id");
@@ -275,10 +265,8 @@ const main = () => {
 
     /* events fired on the drop targets */
     document.addEventListener("dragover", event => {
-        // prevent default to allow drop
-        
+        // prevent default to allow drop        
         event.preventDefault();
-        // console.log("no dropping")
         // if id of candy is next to candy being dragged, remove preventDefault
     });
 
@@ -304,11 +292,6 @@ const main = () => {
         if (event.target.classList.contains("dropzone")) {
         event.target.classList.remove("dragover");
 
-        // need the name of candy AND the coordinates of the drop target
-        // so as to MAP the itemBoard array and then check if any candies get crushed
-        // if no candies crushed, nothing happens
-        // if candies can be crushed, amend the itemBoard array and then render
-        
         // get candy name of drop target
         let candyDroppedOn = $droppable.attr("src");
         droppedCandyName = candyDroppedOn.slice(9, 15);
@@ -327,7 +310,7 @@ const main = () => {
         }
     });
 
-    // --------------------------------------------------
+    // --------------------- VIEW -----------------------------------------
 
     const render = () => {
         $container.empty();
@@ -354,9 +337,28 @@ const main = () => {
         
         $container.append($gameBoard);
     }
+
+    const initialScreen = () => {
+        const $title = $("<h1>").text("CANDY CRUSH");
+        const $img = $("<p>").text(
+            "Image"
+            );
+        const $startButton = $("<button>").text("PLAY");
+        const $howToPlay = $("<p>").text(
+            "Drag and drop a candy. Get 3 or 4 of the same horizontally or vertically."
+            );
+        $startButton.on("click", newGame);
+
+        $container.append($title, $img, $howToPlay, $startButton);
+    }
    
 
+    // ----------------------------- GAME -----------------------------
+
     newGame();
+
+    // load initial screen with button for new game
+    // initialScreen();
       
     
 
