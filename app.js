@@ -8,7 +8,6 @@ const main = () => {
 
     let itemBoard = [];
 
-    // let $dragged;
     let draggedCandyName = "";
     let draggedCandyId = "";
     // array of 4
@@ -257,7 +256,6 @@ const main = () => {
         if (candiesToCrush.length>2) {
             itemBoard = checkingArray;
             render();
-            // $dragged = "";
             draggedCandyName = "";
             draggedCandyId = "";
             droppedCandyName = "";
@@ -265,9 +263,7 @@ const main = () => {
             setTimeout(crushCandies, 1500);
         }
         
-        // crushCandies();
-        // setTimeout(crushCandies, 1500);
-        }          
+    }          
         
     const crushCandies = () => {
         console.log("crushing candies: " + candiesToCrush);
@@ -319,7 +315,7 @@ const main = () => {
         let gravityBoard = [];
 
         initialBoard.forEach(column => {
-            let newColumn = column.filter(candy=> candy !== "empty")
+            let newColumn = column.filter(candy => candy !== "empty")
             while (newColumn.length < BOARDHEIGHT) {
                 newColumn.unshift("empty");
             }               
@@ -392,10 +388,8 @@ const main = () => {
         
         if (event.target.classList.contains("dropzone")) {
             // event.target.classList.add("dragover");
-
-
             event.preventDefault();}
-        // if id of candy is next to candy being dragged, remove preventDefault
+            // if id of candy is next to candy being dragged, preventDefault
     });
 
     document.addEventListener("dragenter", event => {
