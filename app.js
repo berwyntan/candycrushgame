@@ -169,7 +169,7 @@ const main = () => {
     const checkForCandyCrush = () => {
         // map current candy array
         console.log("checking for crush");
-        const checkingArray = itemBoard.map(candy=>candy);
+        const checkingArray = itemBoard;
         // input in new candy arrnagement and check if any candy gets crushed
         // candy1 is the dragged candy
 
@@ -257,6 +257,11 @@ const main = () => {
         if (candiesToCrush.length>2) {
             itemBoard = checkingArray;
             render();
+            $dragged = "";
+            draggedCandyName = "";
+            draggedCandyId = "";
+            droppedCandyName = "";
+            droppedCandyId = "";
             setTimeout(crushCandies, 1500);
         }
         
@@ -286,29 +291,48 @@ const main = () => {
     const gravity = () => {
         // console.log("gravity board: ")
         // map the itemBoard
-        const gravityBoard = itemBoard.map(candy => candy);
+        let initialBoard = itemBoard;
         // console.log(gravityBoard);
         // use 'some' callback to check for empty in row UPDATE: used for loop
-        for (let k=0; k<BOARDHEIGHT-1; k++) {
-            for (let j=BOARDHEIGHT-1; j>=1; j--) {
-                for (let i=0; i<BOARDWIDTH; i++) {
-                    // console.log("iteration: " + k + ", row: " + j + ", col: " + i);
-                    const candyToCheck = gravityBoard[j][i];
-                    const candyAbove = gravityBoard[j-1][i];
-                    // if true, find the empty slot and slot above
-                    if (candyToCheck === "empty" && candyAbove !== "empty") {
-                        // swop places only if above is not empty
-                        gravityBoard[j][i] = candyAbove;
-                        gravityBoard[j-1][i] = "empty";
-                    }
-                }
-            }
-        }
+        // for (let k=0; k<BOARDHEIGHT-1; k++) {
+        //     for (let j=BOARDHEIGHT-1; j>=1; j--) {
+        //         for (let i=0; i<BOARDWIDTH; i++) {
+        //             // console.log("iteration: " + k + ", row: " + j + ", col: " + i);
+        //             const candyToCheck = gravityBoard[j][i];
+        //             const candyAbove = gravityBoard[j-1][i];
+        //             // if true, find the empty slot and slot above
+        //             if (candyToCheck === "empty" && candyAbove !== "empty") {
+        //                 // swop places only if above is not empty
+        //                 gravityBoard[j][i] = candyAbove;
+        //                 gravityBoard[j-1][i] = "empty";
+        //             }
+        //         }
+        //     }
+        // }
         // repeat for all until only the top row is empty      
         // console.log(gravityBoard);
+
+        // transpose mapped itemBoard
+        initialBoard = initialBoard[0].map((_, colIndex) => initialBoard.map(row => row[colIndex]));
+        console.log("initial gravity board: ");
+        console.log(initialBoard);
+        let gravityBoard = [];
+
+        initialBoard.forEach(column => {
+            let newColumn = column.filter(candy=> candy !== "empty")
+            while (newColumn.length < BOARDHEIGHT) {
+                newColumn.unshift("empty");
+            }               
+            gravityBoard.push(newColumn);
+        })
+        console.log(gravityBoard);
+
         // itemboard copys the mapped array
-        itemBoard = gravityBoard;
+        // itemBoard = gravityBoard;
+
+        itemBoard = gravityBoard[0].map((_, colIndex) => gravityBoard.map(row => row[colIndex]));
         render();
+        // setTimeout(checkForCandyCrush, 1500);
         // refill candies board
         setTimeout(refillCandiesBoard, 1500);
     }
