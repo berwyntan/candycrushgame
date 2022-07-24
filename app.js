@@ -10,12 +10,13 @@ const main = () => {
 
     let draggedCandyName = "";
     let draggedCandyId = "";
-    // array of 4
     let droppableCandiesId = [];
     let droppedCandyName = "";
     let droppedCandyId = "";
 
     let candiesToCrush = [];
+
+    let comboMeter = 0;
 
     const createRandomArray = () => {
         let itemBoard = [];
@@ -252,6 +253,7 @@ const main = () => {
         checkCol();
         console.log("candies to crush: " + candiesToCrush)
         console.log("length of candies to crush array: " + candiesToCrush.length);
+
         
         if (candiesToCrush.length>2) {
             itemBoard = checkingArray;
@@ -260,7 +262,10 @@ const main = () => {
             draggedCandyId = "";
             droppedCandyName = "";
             droppedCandyId = "";
+            comboMeter += candiesToCrush.length;
             setTimeout(crushCandies, 1500);
+        } else {
+            comboMeter = 0;
         }
         
     }          
@@ -275,8 +280,8 @@ const main = () => {
         candiesToCrush = [];
         console.log("cleared: candies to crush array " + candiesToCrush)
         render();
-        // console.log("itemBoard: ")
-        // console.log(itemBoard)
+        console.log("combo points: ")
+        console.log(comboMeter)
         
         gravity();        
     } 
