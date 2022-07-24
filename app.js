@@ -8,7 +8,7 @@ const main = () => {
 
     let itemBoard = [];
 
-    let $dragged;
+    // let $dragged;
     let draggedCandyName = "";
     let draggedCandyId = "";
     // array of 4
@@ -257,7 +257,7 @@ const main = () => {
         if (candiesToCrush.length>2) {
             itemBoard = checkingArray;
             render();
-            $dragged = "";
+            // $dragged = "";
             draggedCandyName = "";
             draggedCandyId = "";
             droppedCandyName = "";
@@ -361,7 +361,7 @@ const main = () => {
 
     document.addEventListener("dragstart", event => {
         // store a ref. on the dragged elem
-        $dragged = $(event.target);
+        const $dragged = $(event.target);
         // make it half transparent
         event.target.classList.add("dragging");
         // console.log(event.target)
