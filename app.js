@@ -6,12 +6,12 @@ const main = () => {
     const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
     const COMBORANK = [
         {points: 0, rank: ""},
-        {points: 10, rank: "Delicious"},
-        {points: 13, rank: "Crushing"},
-        {points: 16, rank: "Bon Appetit"},
-        {points: 19, rank: "Awesome"},
-        {points: 22, rank: "Savory"},
-        {points: 25, rank: "So Scrumptious"},
+        {points: 10, rank: "Delicious.."},
+        {points: 13, rank: "Crushing."},
+        {points: 16, rank: "Berserk?"},
+        {points: 19, rank: "Awesome!"},
+        {points: 22, rank: "Savory!"},
+        {points: 25, rank: "So Scrumptious!!"},
         {points: 28, rank: "Super Sweet Style!!!"},
     ]
     const $container = $(".container");
@@ -467,7 +467,7 @@ const main = () => {
         $container.empty();
         const $info = $("<div>").addClass("info");
         const $score = $("<div>").addClass("score").text(`Score: ${score}`);
-        const $combo = $("<div>").addClass("combo").text(`${getComboRank()}`);
+        const $combo = $("<span>").addClass("combo").text(`${getComboRank()}`);
         $info.append($score, $combo);
 
         const $gameBoard = $("<div>").addClass("game-board");
@@ -477,7 +477,7 @@ const main = () => {
             for (let i=0; i < BOARDWIDTH; i++) {
                 const $candy = $("<img>");
                 $candy.attr("id", `row${j}col${i}`);
-                $candy.attr("src", `./images/${itemBoard[j][i]}.png`);
+                $candy.attr("src", `./images/${itemBoard[j][i]}.jpg`);
                 $candy.attr("draggable", "true");
                 
                 $row.append($candy);

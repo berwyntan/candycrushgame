@@ -1,8 +1,21 @@
 .info {
     display: flex;
-    justify-content: space-around;
     font-size: large;
-    font-weight: 500;
+    font-weight: 500;   
+    position: relative; 
+    height: 25px;
+    align-items: center;
+}
+
+.score {
+    position: absolute;
+    left: 200px;
+}
+
+.combo {
+    position: absolute;
+    text-align: right;
+    right: 200px;
 }
 
 img {
