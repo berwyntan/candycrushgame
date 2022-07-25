@@ -2,8 +2,18 @@ const main = () => {
 
     // -------------------------------- MODEL -------------------------------------
     const BOARDWIDTH = 6;
-    const BOARDHEIGHT = 6;
+    const BOARDHEIGHT = 8;
     const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
+    const COMBORANK = [
+        {points: 0, rank: ""},
+        {points: 10, rank: "Delicious"},
+        {points: 13, rank: "Crushing"},
+        {points: 16, rank: "Bon Appetit"},
+        {points: 19, rank: "Awesome"},
+        {points: 22, rank: "Savory"},
+        {points: 25, rank: "So Scrumptious"},
+        {points: 28, rank: "Super Sweet Style!!!"},
+    ]
     const $container = $(".container");
 
     let itemBoard = [];
@@ -17,6 +27,7 @@ const main = () => {
     let candiesToCrush = [];
 
     let comboMeter = 0;
+    let score = 0;
 
     const createRandomArray = () => {
         let itemBoard = [];
@@ -263,6 +274,7 @@ const main = () => {
             droppedCandyName = "";
             droppedCandyId = "";
             comboMeter += candiesToCrush.length;
+            score += candiesToCrush.length;
             setTimeout(crushCandies, 1500);
         } else {
             comboMeter = 0;
@@ -282,6 +294,9 @@ const main = () => {
         render();
         console.log("combo points: ")
         console.log(comboMeter)
+        console.log(getComboRank());
+        console.log("score: ")
+        console.log(score)
         
         gravity();        
     } 
@@ -351,6 +366,14 @@ const main = () => {
         console.log("replaced crushed candies")
         setTimeout(checkForCandyCrush, 1200);
     } 
+
+    const getComboRank = () => {
+        for (let i=COMBORANK.length-1; i>=0; i--) {
+            if (comboMeter >= COMBORANK[i].points) {
+                return COMBORANK[i].rank;
+            }   
+        }
+    }        
 
     // drag and drop code adapted from MDN
 
@@ -442,6 +465,11 @@ const main = () => {
 
     const render = () => {
         $container.empty();
+        const $info = $("<div>").addClass("info");
+        const $score = $("<div>").addClass("score").text(`Score: ${score}`);
+        const $combo = $("<div>").addClass("combo").text(`${getComboRank()}`);
+        $info.append($score, $combo);
+
         const $gameBoard = $("<div>").addClass("game-board");
         
         for (let j = 0; j < BOARDHEIGHT; j++) {
@@ -463,7 +491,7 @@ const main = () => {
             $gameBoard.append($row);
         }
         
-        $container.append($gameBoard);
+        $container.append($info, $gameBoard);
     }
 
     const initialScreen = () => {
