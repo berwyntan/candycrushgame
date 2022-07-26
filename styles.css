@@ -3,7 +3,7 @@
     font-size: large;
     font-weight: 500;   
     position: relative; 
-    height: 25px;
+    height: 28px;
     align-items: center;
 }
 
@@ -12,7 +12,14 @@
     left: 200px;
 }
 
-.combo {
+.combo-points {
+    position: absolute;
+    text-align: center;
+    left: 335px;
+    font-size: 20px;
+}
+
+.combo-text {
     position: absolute;
     text-align: right;
     right: 200px;
@@ -36,7 +43,7 @@ img {
 .game-board {
     display: flex;
     flex-direction: column;
-    background-image: url("images/background.jpg");
+    /* background-image: url("images/background.jpg"); */
     background-size: cover;
     padding: 10px;
 }
@@ -44,4 +51,5 @@ img {
 .crush {
     filter: hue-rotate(200deg);
 }
+
 

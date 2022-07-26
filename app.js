@@ -5,14 +5,14 @@ const main = () => {
     const BOARDHEIGHT = 8;
     const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
     const COMBORANK = [
-        {points: 0, rank: ""},
-        {points: 10, rank: "Delicious.."},
-        {points: 13, rank: "Crushing."},
-        {points: 16, rank: "Berserk?"},
-        {points: 19, rank: "Awesome!"},
-        {points: 22, rank: "Savory!"},
-        {points: 25, rank: "So Scrumptious!!"},
-        {points: 28, rank: "Super Sweet Style!!!"},
+        {points: 0, rank: "", text: ""},
+        {points: 10, rank: "D", text: "Delicious!"},
+        {points: 13, rank: "C", text: "Crazy!"},
+        {points: 16, rank: "B", text: "Bravo!"},
+        {points: 19, rank: "A", text: "Awesome!"},
+        {points: 22, rank: "S", text: "Sweet!"},
+        {points: 25, rank: "SS", text: "Super!!"},
+        {points: 28, rank: "SSS", text: "SSStyle!!!"},
     ]
     const $container = $(".container");
 
@@ -48,9 +48,9 @@ const main = () => {
         for (let j = BOARDHEIGHT-1; j >=0; j--) {
             for (let i=2; i < BOARDWIDTH; i++) {
                 
-                let candyFirst = itemBoard[j][i-2];
-                let candySecond = itemBoard[j][i-1];
-                let candyThird = itemBoard[j][i];
+                const candyFirst = itemBoard[j][i-2];
+                const candySecond = itemBoard[j][i-1];
+                const candyThird = itemBoard[j][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
                     // itemBoard[j][i-2] = "empty";
                     // itemBoard[j][i-1] = "empty";
@@ -75,9 +75,9 @@ const main = () => {
         for (let j = BOARDHEIGHT-1; j >=2; j--) {
             for (let i=0; i < BOARDWIDTH; i++) {
                 
-                let candyFirst = itemBoard[j][i];
-                let candySecond = itemBoard[j-1][i];
-                let candyThird = itemBoard[j-2][i];
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
                     // itemBoard[j][i] = "empty";
                     // itemBoard[j-1][i] = "empty";
@@ -364,16 +364,41 @@ const main = () => {
             }
         render();
         console.log("replaced crushed candies")
-        setTimeout(checkForCandyCrush, 1200);
+        setTimeout(checkHorzMovesLeft, 1200);
     } 
 
     const getComboRank = () => {
         for (let i=COMBORANK.length-1; i>=0; i--) {
             if (comboMeter >= COMBORANK[i].points) {
-                return COMBORANK[i].rank;
+                return `${COMBORANK[i].rank}`;
             }   
         }
-    }        
+    }  
+    
+    const getComboText = () => {
+        for (let i=COMBORANK.length-1; i>=0; i--) {
+            if (comboMeter >= COMBORANK[i].points) {
+                return `${COMBORANK[i].text}`;
+            }   
+        }
+    } 
+
+    const checkHorzMovesLeft = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-2; j>=1; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j+1][i];
+                const candySecond = itemBoard[j][i+1];
+                const candyThird = itemBoard[j][i+2];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(candyFirst);
+                }
+            }
+        }
+        console.log("moves left: " + movesLeft);
+        setTimeout(checkForCandyCrush, 1200);
+    }
 
     // drag and drop code adapted from MDN
 
@@ -467,8 +492,12 @@ const main = () => {
         $container.empty();
         const $info = $("<div>").addClass("info");
         const $score = $("<div>").addClass("score").text(`Score: ${score}`);
-        const $combo = $("<span>").addClass("combo").text(`${getComboRank()}`);
-        $info.append($score, $combo);
+        const $comboPoints = $("<span>").addClass("combo-points")
+        if (comboMeter===0) {
+            $comboPoints.text("")
+        } else $comboPoints.text(`${comboMeter} hit combo`);
+        const $comboText = $("<span>").addClass("combo-text").text(`${getComboText()}`);
+        $info.append($score, $comboPoints, $comboText);
 
         const $gameBoard = $("<div>").addClass("game-board");
         
