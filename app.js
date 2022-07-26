@@ -341,7 +341,7 @@ const main = () => {
             }               
             gravityBoard.push(newColumn);
         })
-        console.log(gravityBoard);
+        // console.log(gravityBoard);
 
         // itemboard copys the mapped array
         // itemBoard = gravityBoard;
@@ -364,7 +364,7 @@ const main = () => {
             }
         render();
         console.log("replaced crushed candies")
-        setTimeout(checkHorzMovesLeft, 1200);
+        setTimeout(checkThreeCandiesMovesLeft, 1200);
     } 
 
     const getComboRank = () => {
@@ -383,7 +383,38 @@ const main = () => {
         }
     } 
 
-    const checkHorzMovesLeft = () => {
+    const checkThreeCandiesMovesLeft = () => {
+        let movesLeft = 0;
+        // for (let j=BOARDHEIGHT-2; j>=1; j--) {
+        //     for (let i=0; i<BOARDWIDTH-3; i++) {
+        //         const candyFirst = itemBoard[j+1][i];
+        //         const candySecond = itemBoard[j][i+1];
+        //         const candyThird = itemBoard[j][i+2];
+        //         if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+        //             movesLeft += 1;
+        //             console.log(candyFirst);
+        //         }
+        //     }
+        // }
+        // console.log("moves left: " + movesLeft);
+        movesLeft += checkHorzPattern1();
+        movesLeft += checkHorzPattern2();
+        movesLeft += checkHorzPattern3();
+        movesLeft += checkHorzPattern4();
+        movesLeft += checkHorzPattern5();
+        movesLeft += checkHorzPattern6();
+        console.log("moves left: " + movesLeft);
+        setTimeout(checkForCandyCrush, 1200);
+    }
+
+    // potential scoring patterns 
+
+    // 3 candies
+
+    // horizontal
+
+    // pattern 1
+    const checkHorzPattern1 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-2; j>=1; j--) {
             for (let i=0; i<BOARDWIDTH-3; i++) {
@@ -392,14 +423,105 @@ const main = () => {
                 const candyThird = itemBoard[j][i+2];
                 if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                     movesLeft += 1;
-                    console.log(candyFirst);
+                    console.log(`row${j+1}col${i}`)
                 }
             }
         }
-        console.log("moves left: " + movesLeft);
-        setTimeout(checkForCandyCrush, 1200);
+        console.log("horz pattern 1: " + movesLeft);
+        return movesLeft;
     }
 
+    // pattern 2
+    const checkHorzPattern2 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-2; j>=1; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j+1][i+1];
+                const candyThird = itemBoard[j][i+2];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("horz pattern 2: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 3
+    const checkHorzPattern3 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-2; j>=1; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j][i+1];
+                const candyThird = itemBoard[j+1][i+2];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("horz pattern 3: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 4
+    const checkHorzPattern4 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-2; j>=1; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j+1][i+1];
+                const candyThird = itemBoard[j+1][i+2];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("horz pattern 4: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 5
+    const checkHorzPattern5 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-2; j>=1; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j+1][i];
+                const candySecond = itemBoard[j][i+1];
+                const candyThird = itemBoard[j+1][i+2];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j+1}col${i}`)
+                }
+            }
+        }
+        console.log("horz pattern 5: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 6
+    const checkHorzPattern6 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-2; j>=1; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j+1][i];
+                const candySecond = itemBoard[j+1][i+1];
+                const candyThird = itemBoard[j][i+2];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j+1}col${i}`)
+                }
+            }
+        }
+        console.log("horz pattern 6: " + movesLeft);
+        return movesLeft;
+    }
+
+    
     // drag and drop code adapted from MDN
 
     /* events fired on the draggable target */
