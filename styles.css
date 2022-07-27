@@ -1,10 +1,18 @@
 .info {
     display: flex;
     font-size: large;
-    font-weight: 500;   
+    font-weight: 400;   
     position: relative; 
     height: 28px;
     align-items: center;
+}
+
+.moves {
+    height: 30px;
+    font-size: large;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
 }
 
 .score {
@@ -26,8 +34,8 @@
 }
 
 img {
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
     margin: 3px;
     cursor: pointer;
 }

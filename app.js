@@ -12,7 +12,7 @@ const main = () => {
         {points: 19, rank: "A", text: "Awesome!"},
         {points: 22, rank: "S", text: "Sweet!"},
         {points: 25, rank: "SS", text: "Super!!"},
-        {points: 28, rank: "SSS", text: "SSStyle!!!"},
+        {points: 30, rank: "SSS", text: "SSStyle!!!"},
     ]
     const $container = $(".container");
 
@@ -28,6 +28,7 @@ const main = () => {
 
     let comboMeter = 0;
     let score = 0;
+    let moves = 0;
 
     const createRandomArray = () => {
         let itemBoard = [];
@@ -268,8 +269,7 @@ const main = () => {
         // console.log(gravityBoard);
 
         // itemboard copys the mapped array
-        // itemBoard = gravityBoard;
-
+        
         itemBoard = gravityBoard[0].map((_, colIndex) => gravityBoard.map(row => row[colIndex]));
         render();
         // setTimeout(checkForCandyCrush, 1500);
@@ -332,7 +332,16 @@ const main = () => {
         movesLeft += checkVertPattern4();
         movesLeft += checkVertPattern5();
         movesLeft += checkVertPattern6();
+        movesLeft += checkVertPattern7();
+        movesLeft += checkVertPattern8();
+        movesLeft += checkVertPattern9();
+        movesLeft += checkVertPattern10();
+        movesLeft += checkVertPattern11();
+        movesLeft += checkVertPattern12();
+        movesLeft += checkVertPattern13();
+        movesLeft += checkVertPattern14();
         console.log("moves left: " + movesLeft);
+        moves = movesLeft;
         setTimeout(checkForCandyCrush, 1200);
     }
 
@@ -610,7 +619,7 @@ const main = () => {
     const checkVertPattern1 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-1; j>=2; j--) {
-            for (let i=0; i<BOARDWIDTH-3; i++) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
                 const candyFirst = itemBoard[j][i+1];
                 const candySecond = itemBoard[j-1][i];
                 const candyThird = itemBoard[j-2][i];
@@ -628,7 +637,7 @@ const main = () => {
     const checkVertPattern2 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-1; j>=2; j--) {
-            for (let i=0; i<BOARDWIDTH-3; i++) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
                 const candyFirst = itemBoard[j][i];
                 const candySecond = itemBoard[j-1][i+1];
                 const candyThird = itemBoard[j-2][i];
@@ -646,7 +655,7 @@ const main = () => {
     const checkVertPattern3 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-1; j>=2; j--) {
-            for (let i=0; i<BOARDWIDTH-3; i++) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
                 const candyFirst = itemBoard[j][i];
                 const candySecond = itemBoard[j-1][i];
                 const candyThird = itemBoard[j-2][i+1];
@@ -664,7 +673,7 @@ const main = () => {
     const checkVertPattern4 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-1; j>=2; j--) {
-            for (let i=0; i<BOARDWIDTH-3; i++) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
                 const candyFirst = itemBoard[j][i];
                 const candySecond = itemBoard[j-1][i+1];
                 const candyThird = itemBoard[j-2][i+1];
@@ -682,7 +691,7 @@ const main = () => {
     const checkVertPattern5 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-1; j>=2; j--) {
-            for (let i=0; i<BOARDWIDTH-3; i++) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
                 const candyFirst = itemBoard[j][i+1];
                 const candySecond = itemBoard[j-1][i];
                 const candyThird = itemBoard[j-2][i+1];
@@ -700,7 +709,7 @@ const main = () => {
     const checkVertPattern6 = () => {
         let movesLeft = 0;
         for (let j=BOARDHEIGHT-1; j>=2; j--) {
-            for (let i=0; i<BOARDWIDTH-3; i++) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
                 const candyFirst = itemBoard[j][i+1];
                 const candySecond = itemBoard[j-1][i+1];
                 const candyThird = itemBoard[j-2][i];
@@ -715,6 +724,165 @@ const main = () => {
     }
 
     // 4 candies
+    // pattern 7
+    const checkVertPattern7 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i];
+                const candyFourth = itemBoard[j-3][i];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 7: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 8
+    const checkVertPattern8 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i];
+                const candyFourth = itemBoard[j-3][i];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 8: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 9
+    const checkVertPattern9 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i+1];
+                const candyFourth = itemBoard[j-3][i];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 9: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 10
+    const checkVertPattern10 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i];
+                const candyFourth = itemBoard[j-3][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 10: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 11
+    const checkVertPattern11 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i+1];
+                const candyFourth = itemBoard[j-3][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 11: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 12
+    const checkVertPattern12 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i+1];
+                const candyFourth = itemBoard[j-3][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 12: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 13
+    const checkVertPattern13 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i];
+                const candyFourth = itemBoard[j-3][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 13: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 14
+    const checkVertPattern14 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=3; j--) {
+            for (let i=0; i<BOARDWIDTH-1; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i+1];
+                const candyFourth = itemBoard[j-3][i];
+                if (candyFirst===candySecond && candySecond===candyThird && 
+                    candyThird===candyFourth && candyFourth!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 14: " + movesLeft);
+        return movesLeft;
+    }
 
     
     // drag and drop code adapted from MDN
@@ -807,6 +975,10 @@ const main = () => {
 
     const render = () => {
         $container.empty();
+        const $moves = $("<div>").addClass("moves");
+        if (moves===0) {
+            $moves.text("");
+        } else $moves.text(`Moves: ${moves}`);
         const $info = $("<div>").addClass("info");
         const $score = $("<div>").addClass("score").text(`Score: ${score}`);
         const $comboPoints = $("<span>").addClass("combo-points")
@@ -837,7 +1009,7 @@ const main = () => {
             $gameBoard.append($row);
         }
         
-        $container.append($info, $gameBoard);
+        $container.append($moves, $info, $gameBoard);
     }
 
     const initialScreen = () => {
