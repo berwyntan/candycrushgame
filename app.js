@@ -22,7 +22,6 @@ const main = () => {
     const $container = $(".container");
 
     let itemBoard = [];
-    let itemBoardPrev = [];
 
     let draggedCandyName = "";
     let draggedCandyId = "";
@@ -183,9 +182,6 @@ const main = () => {
         console.log("drop targets: " + droppableCandiesId);
     }
 
-    const swapDragAndDroppedCandies = () => {
-
-    }
 
     // check for 3 or 4 in a row or col
     const checkForCandyCrush = () => {
@@ -197,7 +193,6 @@ const main = () => {
 
         if (draggedCandyId !== "") {
             
-            checkingArray = itemBoard;
             let candy1Row = sliceRowNumberFromId(draggedCandyId);
             let candy1Col = sliceColNumberFromId(draggedCandyId);
             // candy2 is the candy being dropped on
@@ -1017,18 +1012,21 @@ const main = () => {
     const render = () => {
         $container.empty();
 
-        const $moves = $("<div>").addClass("moves");
+        const $info1 = $("<div>").addClass("info-1");
+        const $moves = $("<div>").addClass("moves").text(`Moves: ${moves}`);
         if (moves===0) {
-            $moves.text("");
-        } else $moves.text(`Moves: ${moves}`);
-        const $info = $("<div>").addClass("info");
+            $moves.css("color", "transparent");
+        };
         const $score = $("<div>").addClass("score").text(`Score: ${score}`);
-        const $comboPoints = $("<span>").addClass("combo-points")
+        $info1.append($moves, $score);
+
+        const $info2 = $("<div>").addClass("info-2");
+        const $comboPoints = $("<span>").addClass("combo-points").text(`${comboMeter} hit combo`);
         if (comboMeter===0) {
-            $comboPoints.text("")
-        } else $comboPoints.text(`${comboMeter} hit combo`);
+            $comboPoints.css("color", "transparent");
+        };
         const $comboText = $("<span>").addClass("combo-text").text(`${getComboText()}`);
-        $info.append($score, $comboPoints, $comboText);
+        $info2.append($comboPoints, $comboText);
 
         const $gameBoard = $("<div>").addClass("game-board");
         
@@ -1051,7 +1049,7 @@ const main = () => {
             $gameBoard.append($row);
         }
         
-        $container.append($moves, $info, $gameBoard);
+        $container.append($info1, $info2, $gameBoard);
     }
 
     const initialScreen = () => {
