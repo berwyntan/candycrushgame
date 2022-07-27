@@ -22,6 +22,7 @@ const main = () => {
     const $container = $(".container");
 
     let itemBoard = [];
+    let itemBoardPrev = [];
 
     let draggedCandyName = "";
     let draggedCandyId = "";
@@ -182,6 +183,10 @@ const main = () => {
         console.log("drop targets: " + droppableCandiesId);
     }
 
+    const swapDragAndDroppedCandies = () => {
+
+    }
+
     // check for 3 or 4 in a row or col
     const checkForCandyCrush = () => {
         // map current candy array
@@ -191,7 +196,7 @@ const main = () => {
         // candy1 is the dragged candy
 
         if (draggedCandyId !== "") {
-            console.log(itemBoard)
+            
             checkingArray = itemBoard;
             let candy1Row = sliceRowNumberFromId(draggedCandyId);
             let candy1Col = sliceColNumberFromId(draggedCandyId);
@@ -206,11 +211,13 @@ const main = () => {
             checkingArray[candy2Row][candy2Col] = candy2Name;
             checkRow(checkingArray);
             checkCol(checkingArray);
+            console.log("candies to crush: " + candiesToCrush)
+            console.log("length of candies to crush array: " + candiesToCrush.length);
         }
         
         
-        // checkRow(itemBoard);
-        // checkCol(itemBoard);
+        checkRow(itemBoard);
+        checkCol(itemBoard);
         console.log("candies to crush: " + candiesToCrush)
         console.log("length of candies to crush array: " + candiesToCrush.length);
         
@@ -228,11 +235,10 @@ const main = () => {
             score += candiesToCrush.length;
             setTimeout(crushCandies, 1200);
         } else {
-            checkRow(itemBoard);
-            checkCol(itemBoard);
-            render();
-            console.log("candies to crush: " + candiesToCrush)
             comboMeter = 0;
+            render();
+            
+            
         }
         
     }          
@@ -927,7 +933,10 @@ const main = () => {
         draggedCandyId = $dragged.attr("id");
         console.log("dragging candy " + draggedCandyId);
         getDroppableCandies(draggedCandyId);
-        
+
+        // event.dataTransfer.effectAllowed = "none";
+        // event.dataTransfer.setData("text/plain", none);
+                
 
     });
 
@@ -939,7 +948,7 @@ const main = () => {
             console.log("removed dropzone from " + candy)
         })
         droppableCandiesId = [];
-        draggedCandyName = "";
+        // draggedCandyName = "";
         console.log("drop targets: " + droppableCandiesId)
         console.log("dragged candy name: " + draggedCandyName)
         
@@ -959,7 +968,7 @@ const main = () => {
         // highlight potential drop target when the draggable element enters it
         if (event.target.classList.contains("dropzone")) {
         // event.target.classList.add("dragover");
-        event.preventDefault();
+            event.preventDefault();
         }
     });
 
@@ -976,27 +985,30 @@ const main = () => {
         const $droppable = $(event.target);
         // move dragged element to the selected drop target
         if (event.target.classList.contains("dropzone")) {
-        event.target.classList.remove("dragover");
+            event.target.classList.remove("dragover");
 
-        // get candy name of drop target
-        let candyDroppedOn = $droppable.attr("src");
-        droppedCandyName = candyDroppedOn.slice(9, 15);
-        console.log("dropped onto " + droppedCandyName);
+            // get candy name of drop target
+            let candyDroppedOn = $droppable.attr("src");
+            droppedCandyName = candyDroppedOn.slice(9, 15);
+            console.log("dropped onto " + droppedCandyName);
 
-        // get id of drop target
-        droppedCandyId = $droppable.attr("id");
-        console.log("dropped onto: " + droppedCandyId)
-        droppableCandiesId.forEach(candy => {
-            $(`#${candy}`).removeClass("dropzone");
-            console.log("removed dropzone from " + candy)
-        })
-        droppableCandiesId = [];
-        // console.log("drop targets: " + droppableCandiesId);
-        checkForCandyCrush();
+            // get id of drop target
+            droppedCandyId = $droppable.attr("id");
+            console.log("dropped onto: " + droppedCandyId)
+
+            // clear droppable candies array and class
+            droppableCandiesId.forEach(candy => {
+                $(`#${candy}`).removeClass("dropzone");
+                console.log("removed dropzone from " + candy)
+            })
+            droppableCandiesId = [];
+            // console.log("drop targets: " + droppableCandiesId);
+            
+            checkForCandyCrush();
 
 
-        // $dragged.parentNode.removeChild($dragged);
-        // event.target.appendChild($dragged);
+            // $dragged.parentNode.removeChild($dragged);
+            // event.target.appendChild($dragged);
         }
     });
 
@@ -1067,7 +1079,7 @@ const main = () => {
             );
         const $startButton = $("<button>").text("PLAY");
         const $howToPlay = $("<div>")
-        const $howToPlay0 = $("<div>").text("Get a score of 10");  
+        const $howToPlay0 = $("<div>").text("Get a score of 50");  
         // const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
         // const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
         $howToPlay.append($howToPlay0); /*, $howToPlay1, $howToPlay2);*/        
