@@ -199,65 +199,6 @@ const main = () => {
 
         }
 
-        // let candy1Row = sliceRowNumberFromId(draggedCandyId);
-        // let candy1Col = sliceColNumberFromId(draggedCandyId);
-        // // candy2 is the candy being dropped on
-        // let candy2Row = sliceRowNumberFromId(droppedCandyId);
-        // let candy2Col = sliceColNumberFromId(droppedCandyId);
-        // // swop the candy names
-        // const candy1Name = droppedCandyName;
-        // const candy2Name = draggedCandyName;
-        // // update the checking Array
-        // checkingArray[candy1Row][candy1Col] = candy1Name;
-        // checkingArray[candy2Row][candy2Col] = candy2Name;
-
-
-        // check rows
-        // for (let j = BOARDHEIGHT-1; j >=0; j--) {
-        //     for (let i=2; i < BOARDWIDTH; i++) {
-                
-        //         let candyFirst = checkingArray[j][i-2];
-        //         let candySecond = checkingArray[j][i-1];
-        //         let candyThird = checkingArray[j][i];
-        //         if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-        //             // checkingArray[j][i-2] = "empty";
-        //             // checkingArray[j][i-1] = "empty";
-        //             // checkingArray[j][i] = "empty";
-        //             candiesToCrush.push(
-        //                 `row${j}col${i-2}`,
-        //                 `row${j}col${i-1}`,
-        //                 `row${j}col${i}`,
-        //             )
-                    
-        //             console.log("row " + j + "crushed, but need to render change"); 
-        //             console.log("candies to crush: " + candiesToCrush);   
-        //             itemBoard = checkingArray;
-        //             render();              
-        //         }
-        //     }} 
-        // check col
-        // for (let j = BOARDHEIGHT-1; j >=2; j--) {
-        //     for (let i=0; i < BOARDWIDTH; i++) {
-                
-        //         let candyFirst = checkingArray[j][i];
-        //         let candySecond = checkingArray[j-1][i];
-        //         let candyThird = checkingArray[j-2][i];
-        //         if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-        //             // checkingArray[j][i] = "empty";
-        //             // checkingArray[j-1][i] = "empty";
-        //             // checkingArray[j-2][i] = "empty";
-        //             candiesToCrush.push(
-        //                 `row${j}col${i}`,
-        //                 `row${j-1}col${i}`,
-        //                 `row${j-2}col${i}`,
-        //             )
-
-        //             console.log("column " + i + "crushed, but need to render"); 
-        //             console.log("candies to crush: " + candiesToCrush);  
-        //             itemBoard = checkingArray;
-        //             render();                   
-        //         }
-        //     }}
         
         
         checkRow();
@@ -278,6 +219,7 @@ const main = () => {
             setTimeout(crushCandies, 1500);
         } else {
             comboMeter = 0;
+            render();
         }
         
     }          
@@ -308,25 +250,7 @@ const main = () => {
         // console.log("gravity board: ")
         // map the itemBoard
         let initialBoard = itemBoard;
-        // console.log(gravityBoard);
-        // use 'some' callback to check for empty in row UPDATE: used for loop
-        // for (let k=0; k<BOARDHEIGHT-1; k++) {
-        //     for (let j=BOARDHEIGHT-1; j>=1; j--) {
-        //         for (let i=0; i<BOARDWIDTH; i++) {
-        //             // console.log("iteration: " + k + ", row: " + j + ", col: " + i);
-        //             const candyToCheck = gravityBoard[j][i];
-        //             const candyAbove = gravityBoard[j-1][i];
-        //             // if true, find the empty slot and slot above
-        //             if (candyToCheck === "empty" && candyAbove !== "empty") {
-        //                 // swop places only if above is not empty
-        //                 gravityBoard[j][i] = candyAbove;
-        //                 gravityBoard[j-1][i] = "empty";
-        //             }
-        //         }
-        //     }
-        // }
-        // repeat for all until only the top row is empty      
-        // console.log(gravityBoard);
+        
 
         // transpose mapped itemBoard
         initialBoard = initialBoard[0].map((_, colIndex) => initialBoard.map(row => row[colIndex]));
@@ -385,6 +309,9 @@ const main = () => {
 
     const checkThreeAndFourCandiesMovesLeft = () => {
         let movesLeft = 0;
+        // for (let i=1; i>=14; i++) {
+        //     movesLeft += `checkHorzPattern${i}`();
+        // }
         movesLeft += checkHorzPattern1();
         movesLeft += checkHorzPattern2();
         movesLeft += checkHorzPattern3();
@@ -399,7 +326,13 @@ const main = () => {
         movesLeft += checkHorzPattern12();
         movesLeft += checkHorzPattern13();
         movesLeft += checkHorzPattern14();
-        console.log("horz moves left: " + movesLeft);
+        movesLeft += checkVertPattern1();
+        movesLeft += checkVertPattern2();
+        movesLeft += checkVertPattern3();
+        movesLeft += checkVertPattern4();
+        movesLeft += checkVertPattern5();
+        movesLeft += checkVertPattern6();
+        console.log("moves left: " + movesLeft);
         setTimeout(checkForCandyCrush, 1200);
     }
 
@@ -669,6 +602,119 @@ const main = () => {
         console.log("horz pattern 14: " + movesLeft);
         return movesLeft;
     }
+
+    // vertical
+
+    // 3 candies
+    // pattern 1
+    const checkVertPattern1 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=2; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 1: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 2
+    const checkVertPattern2 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=2; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 2: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 3
+    const checkVertPattern3 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=2; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 3: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 4
+    const checkVertPattern4 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=2; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i}`)
+                }
+            }
+        }
+        console.log("vert pattern 4: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 5
+    const checkVertPattern5 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=2; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i];
+                const candyThird = itemBoard[j-2][i+1];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 5: " + movesLeft);
+        return movesLeft;
+    }
+
+    // pattern 6
+    const checkVertPattern6 = () => {
+        let movesLeft = 0;
+        for (let j=BOARDHEIGHT-1; j>=2; j--) {
+            for (let i=0; i<BOARDWIDTH-3; i++) {
+                const candyFirst = itemBoard[j][i+1];
+                const candySecond = itemBoard[j-1][i+1];
+                const candyThird = itemBoard[j-2][i];
+                if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                    movesLeft += 1;
+                    console.log(`row${j}col${i+1}`)
+                }
+            }
+        }
+        console.log("vert pattern 6: " + movesLeft);
+        return movesLeft;
+    }
+
+    // 4 candies
 
     
     // drag and drop code adapted from MDN
