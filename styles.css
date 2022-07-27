@@ -52,12 +52,26 @@ img {
     display: flex;
     flex-direction: column;
     /* background-image: url("images/background.jpg"); */
-    background-size: cover;
+    /* background-size: cover; */
     padding: 10px;
+    position: relative;
 }
 
 .crush {
     filter: hue-rotate(200deg);
+    /* background-color: yellow; */
+}
+
+.stage-end {
+    font-size: x-large;
+    color: aliceblue;
+    background-color: gray;
+    padding: 30px;
+    text-align: center;
+    position: absolute;
+    top: 30%;
+    left: 290px;
+    opacity: 80%;
 }
 
 

@@ -2,7 +2,7 @@ const main = () => {
 
     // -------------------------------- MODEL -------------------------------------
     const BOARDWIDTH = 6;
-    const BOARDHEIGHT = 8;
+    const BOARDHEIGHT = 6;
     const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
     const COMBORANK = [
         {points: 0, rank: "", text: ""},
@@ -14,6 +14,11 @@ const main = () => {
         {points: 25, rank: "SS", text: "Super!!"},
         {points: 30, rank: "SSS", text: "SSStyle!!!"},
     ]
+    const HOWTOPLAY = [
+        "Match 3 or more candies in a row or column.",
+        "Swap a candy using drag and drop.",
+        "Meet the objective before you run out of moves!"
+    ];
     const $container = $(".container");
 
     let itemBoard = [];
@@ -44,14 +49,14 @@ const main = () => {
     }
 
     // check rows from bottom row
-    const checkRow = () => {
+    const checkRow = array => {
         
         for (let j = BOARDHEIGHT-1; j >=0; j--) {
             for (let i=2; i < BOARDWIDTH; i++) {
                 
-                const candyFirst = itemBoard[j][i-2];
-                const candySecond = itemBoard[j][i-1];
-                const candyThird = itemBoard[j][i];
+                const candyFirst = array[j][i-2];
+                const candySecond = array[j][i-1];
+                const candyThird = array[j][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
                     // itemBoard[j][i-2] = "empty";
                     // itemBoard[j][i-1] = "empty";
@@ -71,14 +76,14 @@ const main = () => {
     }
 
     // check col from bottom row
-    const checkCol = () => {
+    const checkCol = array => {
         
         for (let j = BOARDHEIGHT-1; j >=2; j--) {
             for (let i=0; i < BOARDWIDTH; i++) {
                 
-                const candyFirst = itemBoard[j][i];
-                const candySecond = itemBoard[j-1][i];
-                const candyThird = itemBoard[j-2][i];
+                const candyFirst = array[j][i];
+                const candySecond = array[j-1][i];
+                const candyThird = array[j-2][i];
                 if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
                     // itemBoard[j][i] = "empty";
                     // itemBoard[j-1][i] = "empty";
@@ -129,8 +134,8 @@ const main = () => {
     const newGame = () => {
         itemBoard = createRandomArray();  
         for (let i=0; i<10; i++) {
-            checkRow();
-            checkCol();
+            checkRow(itemBoard);
+            checkCol(itemBoard);
             crushCandiesNewGameOnly();
             // checkForCandyCrush();
             refillCandiesBoardNewGameOnly();   
@@ -181,11 +186,13 @@ const main = () => {
     const checkForCandyCrush = () => {
         // map current candy array
         console.log("checking for crush");
-        const checkingArray = itemBoard;
+        let checkingArray = itemBoard;
         // input in new candy arrnagement and check if any candy gets crushed
         // candy1 is the dragged candy
 
         if (draggedCandyId !== "") {
+            console.log(itemBoard)
+            checkingArray = itemBoard;
             let candy1Row = sliceRowNumberFromId(draggedCandyId);
             let candy1Col = sliceColNumberFromId(draggedCandyId);
             // candy2 is the candy being dropped on
@@ -197,19 +204,21 @@ const main = () => {
             // update the checking Array
             checkingArray[candy1Row][candy1Col] = candy1Name;
             checkingArray[candy2Row][candy2Col] = candy2Name;
-
+            checkRow(checkingArray);
+            checkCol(checkingArray);
         }
-
         
         
-        checkRow();
-        checkCol();
+        // checkRow(itemBoard);
+        // checkCol(itemBoard);
         console.log("candies to crush: " + candiesToCrush)
         console.log("length of candies to crush array: " + candiesToCrush.length);
-
+        
         
         if (candiesToCrush.length>2) {
             itemBoard = checkingArray;
+            // checkRow(itemBoard);
+            // checkCol(itemBoard);
             render();
             draggedCandyName = "";
             draggedCandyId = "";
@@ -217,10 +226,13 @@ const main = () => {
             droppedCandyId = "";
             comboMeter += candiesToCrush.length;
             score += candiesToCrush.length;
-            setTimeout(crushCandies, 1500);
+            setTimeout(crushCandies, 1200);
         } else {
-            comboMeter = 0;
+            checkRow(itemBoard);
+            checkCol(itemBoard);
             render();
+            console.log("candies to crush: " + candiesToCrush)
+            comboMeter = 0;
         }
         
     }          
@@ -274,7 +286,7 @@ const main = () => {
         render();
         // setTimeout(checkForCandyCrush, 1500);
         // refill candies board
-        setTimeout(refillCandiesBoard, 1500);
+        setTimeout(refillCandiesBoard, 1200);
     }
 
     const refillCandiesBoard = () => {
@@ -288,7 +300,7 @@ const main = () => {
             }
         render();
         console.log("replaced crushed candies")
-        setTimeout(checkThreeAndFourCandiesMovesLeft, 1200);
+        setTimeout(checkThreeAndFourCandiesMovesLeft, 100);
     } 
 
     const getComboRank = () => {
@@ -342,7 +354,19 @@ const main = () => {
         movesLeft += checkVertPattern14();
         console.log("moves left: " + movesLeft);
         moves = movesLeft;
-        setTimeout(checkForCandyCrush, 1200);
+        // setTimeout(checkForCandyCrush, 1200);
+        checkWinCon();
+    }
+
+    const checkWinCon = () => {
+        if (moves===0) {
+            console.log("You are out of moves!");
+        } else if (score>=50) {
+            console.log("You win!");
+            $(".game-board").append($("<span>").addClass("stage-end").text("STAGE CLEAR!"));
+            $("img").attr("draggable", "false");
+            $("img").css("cursor", "auto");
+        } else setTimeout(checkForCandyCrush, 1200);
     }
 
     // potential scoring patterns 
@@ -912,6 +936,7 @@ const main = () => {
         event.target.classList.remove("dragging");
         droppableCandiesId.forEach(candy => {
             $(`#${candy}`).removeClass("dropzone");
+            console.log("removed dropzone from " + candy)
         })
         droppableCandiesId = [];
         draggedCandyName = "";
@@ -961,6 +986,10 @@ const main = () => {
         // get id of drop target
         droppedCandyId = $droppable.attr("id");
         console.log("dropped onto: " + droppedCandyId)
+        droppableCandiesId.forEach(candy => {
+            $(`#${candy}`).removeClass("dropzone");
+            console.log("removed dropzone from " + candy)
+        })
         droppableCandiesId = [];
         // console.log("drop targets: " + droppableCandiesId);
         checkForCandyCrush();
@@ -975,6 +1004,7 @@ const main = () => {
 
     const render = () => {
         $container.empty();
+
         const $moves = $("<div>").addClass("moves");
         if (moves===0) {
             $moves.text("");
@@ -1018,9 +1048,30 @@ const main = () => {
             "Image"
             );
         const $startButton = $("<button>").text("PLAY");
-        const $howToPlay = $("<p>").text(
-            "Drag and drop a candy. Get 3 or 4 of the same horizontally or vertically."
+        const $howToPlay = $("<div>")
+        const $howToPlay0 = $("<div>").text(HOWTOPLAY[0]);  
+        const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
+        const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
+        $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2);          
+            
+        $startButton.on("click", showStage);
+
+        $container.append($title, $img, $howToPlay, $startButton);
+    }
+
+    const showStage = () => {
+        $container.empty();
+        const $title = $("<h2>").text("STAGE 1");
+        const $img = $("<p>").text(
+            "Image"
             );
+        const $startButton = $("<button>").text("PLAY");
+        const $howToPlay = $("<div>")
+        const $howToPlay0 = $("<div>").text("Get a score of 10");  
+        // const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
+        // const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
+        $howToPlay.append($howToPlay0); /*, $howToPlay1, $howToPlay2);*/        
+            
         $startButton.on("click", newGame);
 
         $container.append($title, $img, $howToPlay, $startButton);
@@ -1029,10 +1080,10 @@ const main = () => {
 
     // ----------------------------- GAME -----------------------------
 
-    newGame();
+    // newGame();
 
     // load initial screen with button for new game
-    // initialScreen();
+    initialScreen();
       
     
 
