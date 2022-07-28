@@ -865,7 +865,9 @@ const checkVertPattern2 = () => {
             const candyThird = itemBoard[j-2][i];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j-1}col${i+1}`);
+                droppables.push(`row${j-1}col${i}`);
             }
         }
     }
@@ -883,7 +885,9 @@ const checkVertPattern3 = () => {
             const candyThird = itemBoard[j-2][i+1];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j-2}col${i+1}`);
+                droppables.push(`row${j-2}col${i}`);
             }
         }
     }
@@ -901,7 +905,9 @@ const checkVertPattern4 = () => {
             const candyThird = itemBoard[j-2][i+1];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j}col${i}`);
+                droppables.push(`row${j}col${i+1}`);
             }
         }
     }
@@ -919,7 +925,9 @@ const checkVertPattern5 = () => {
             const candyThird = itemBoard[j-2][i+1];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i+1}`)
+                // console.log(`row${j}col${i+1}`)
+                draggables.push(`row${j-1}col${i}`);
+                droppables.push(`row${j-1}col${i+1}`);
             }
         }
     }
@@ -937,7 +945,9 @@ const checkVertPattern6 = () => {
             const candyThird = itemBoard[j-2][i];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i+1}`)
+                // console.log(`row${j}col${i+1}`)
+                draggables.push(`row${j-2}col${i}`);
+                droppables.push(`row${j-2}col${i+1}`);
             }
         }
     }
