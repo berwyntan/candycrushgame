@@ -395,9 +395,9 @@ const getComboText = () => {
 
 const checkThreeAndFourCandiesMovesLeft = () => {
     let movesLeft = 0;
-    // for (let i=1; i>=14; i++) {
-    //     movesLeft += `checkHorzPattern${i}`();
-    // }
+    draggables = [];
+    droppables = [];
+
     movesLeft += checkHorzPattern1();
     movesLeft += checkHorzPattern2();
     movesLeft += checkHorzPattern3();
@@ -412,6 +412,10 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     movesLeft += checkHorzPattern12();
     movesLeft += checkHorzPattern13();
     movesLeft += checkHorzPattern14();
+    movesLeft += checkHorzPattern15();
+    movesLeft += checkHorzPattern16();
+    movesLeft += checkHorzPattern17();
+    movesLeft += checkHorzPattern18();
     movesLeft += checkVertPattern1();
     movesLeft += checkVertPattern2();
     movesLeft += checkVertPattern3();
@@ -429,6 +433,10 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     console.log("moves left: " + movesLeft);
     moves = movesLeft;
     // setTimeout(checkForCandyCrush, 1200);
+    console.log("draggables: ")
+    console.log(draggables)
+    console.log("droppables: ")
+    console.log(droppables)
     checkWinCon();
 }
 
@@ -479,7 +487,9 @@ const checkHorzPattern2 = () => {
             const candyThird = itemBoard[j][i+2];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`);
+                draggables.push(`row${j+1}col${i+1}`);
+                droppables.push(`row${j}col${i+1}`);
             }
         }
     }
@@ -497,7 +507,9 @@ const checkHorzPattern3 = () => {
             const candyThird = itemBoard[j+1][i+2];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j+1}col${i+2}`);
+                droppables.push(`row${j}col${i+2}`);
             }
         }
     }
@@ -515,7 +527,9 @@ const checkHorzPattern4 = () => {
             const candyThird = itemBoard[j+1][i+2];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j}col${i}`);
+                droppables.push(`row${j+1}col${i}`);
             }
         }
     }
@@ -533,7 +547,9 @@ const checkHorzPattern5 = () => {
             const candyThird = itemBoard[j+1][i+2];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+1}`);
+                droppables.push(`row${j+1}col${i+1}`);
             }
         }
     }
@@ -551,7 +567,9 @@ const checkHorzPattern6 = () => {
             const candyThird = itemBoard[j][i+2];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+2}`);
+                droppables.push(`row${j+1}col${i+2}`);
             }
         }
     }
@@ -572,7 +590,9 @@ const checkHorzPattern7 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j+1}col${i}`);
+                droppables.push(`row${j}col${i}`);
             }
         }
     }
@@ -591,7 +611,9 @@ const checkHorzPattern8 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j+1}col${i+1}`);
+                droppables.push(`row${j}col${i+1}`);
             }
         }
     }
@@ -610,7 +632,9 @@ const checkHorzPattern9 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j+1}col${i+2}`);
+                droppables.push(`row${j}col${i+2}`);
             }
         }
     }
@@ -629,7 +653,9 @@ const checkHorzPattern10 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j+1}col${i+3}`);
+                droppables.push(`row${j}col${i+3}`);
             }
         }
     }
@@ -648,7 +674,9 @@ const checkHorzPattern11 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i}`)
+                // console.log(`row${j}col${i}`)
+                draggables.push(`row${j}col${i}`);
+                droppables.push(`row${j+1}col${i}`);
             }
         }
     }
@@ -667,7 +695,9 @@ const checkHorzPattern12 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+1}`);
+                droppables.push(`row${j+1}col${i+1}`);
             }
         }
     }
@@ -686,7 +716,9 @@ const checkHorzPattern13 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+2}`);
+                droppables.push(`row${j+1}col${i+2}`);
             }
         }
     }
@@ -705,13 +737,100 @@ const checkHorzPattern14 = () => {
             if (candyFirst===candySecond && candySecond===candyThird && 
                 candyThird===candyFourth && candyFourth!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+3}`);
+                droppables.push(`row${j+1}col${i+3}`);
             }
         }
     }
     console.log("horz pattern 14: " + movesLeft);
     return movesLeft;
 }
+// space between
+// pattern 15
+const checkHorzPattern15 = () => {
+    let movesLeft = 0;
+    for (let j=BOARDHEIGHT-1; j>=0; j--) {
+        for (let i=0; i<BOARDWIDTH-4; i++) {
+            const candyFirst = itemBoard[j][i];
+            const candySecond = itemBoard[j][i+2];
+            const candyThird = itemBoard[j][i+3];
+            if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                movesLeft += 1;
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i}`);
+                droppables.push(`row${j+1}col${i+1}`);
+            }
+        }
+    }
+    console.log("horz pattern 15: " + movesLeft);
+    return movesLeft;
+}
+
+// pattern 16
+const checkHorzPattern16 = () => {
+    let movesLeft = 0;
+    for (let j=BOARDHEIGHT-1; j>=0; j--) {
+        for (let i=0; i<BOARDWIDTH-4; i++) {
+            const candyFirst = itemBoard[j][i];
+            const candySecond = itemBoard[j][i+1];
+            const candyThird = itemBoard[j][i+3];
+            if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
+                movesLeft += 1;
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+3}`);
+                droppables.push(`row${j+1}col${i+2}`);
+            }
+        }
+    }
+    console.log("horz pattern 16: " + movesLeft);
+    return movesLeft;
+}
+
+// pattern 17
+const checkHorzPattern17 = () => {
+    let movesLeft = 0;
+    for (let j=BOARDHEIGHT-1; j>=0; j--) {
+        for (let i=0; i<BOARDWIDTH-5; i++) {
+            const candyFirst = itemBoard[j][i];
+            const candySecond = itemBoard[j][i+2];
+            const candyThird = itemBoard[j][i+3];
+            const candyFourth = itemBoard[j][i+4];
+            if (candyFirst===candySecond && candySecond===candyThird && 
+                candyThird===candyFourth && candyFourth!=="empty") {
+                movesLeft += 1;
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i}`);
+                droppables.push(`row${j}col${i+1}`);
+            }
+        }
+    }
+    console.log("horz pattern 17: " + movesLeft);
+    return movesLeft;
+}
+
+// pattern 18
+const checkHorzPattern18 = () => {
+    let movesLeft = 0;
+    for (let j=BOARDHEIGHT-1; j>=0; j--) {
+        for (let i=0; i<BOARDWIDTH-5; i++) {
+            const candyFirst = itemBoard[j][i];
+            const candySecond = itemBoard[j][i+1];
+            const candyThird = itemBoard[j][i+2];
+            const candyFourth = itemBoard[j][i+4];
+            if (candyFirst===candySecond && candySecond===candyThird && 
+                candyThird===candyFourth && candyFourth!=="empty") {
+                movesLeft += 1;
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j}col${i+4}`);
+                droppables.push(`row${j}col${i+3}`);
+            }
+        }
+    }
+    console.log("horz pattern 18: " + movesLeft);
+    return movesLeft;
+}
+
 
 // vertical
 
@@ -726,7 +845,9 @@ const checkVertPattern1 = () => {
             const candyThird = itemBoard[j-2][i];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j}col${i+1}`)
+                // console.log(`row${j}col${i+1}`)
+                draggables.push(`row${j}col${i+1}`);
+                droppables.push(`row${j}col${i}`);
             }
         }
     }
@@ -1178,10 +1299,10 @@ const showStage = () => {
 
     // ----------------------------- GAME -----------------------------
 const main = () => { 
-    // newGame();
+    newGame();
 
     // load initial screen with button for new game
-    initialScreen();
+    // initialScreen();
 
     
     // drag and drop code adapted from MDN
