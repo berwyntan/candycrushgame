@@ -29,6 +29,9 @@ let droppableCandiesId = [];
 let droppedCandyName = "";
 let droppedCandyId = "";
 
+let draggables = [];
+let droppables = [];
+
 let candiesToCrush = [];
 
 let comboMeter = 0;
@@ -139,6 +142,7 @@ const newGame = () => {
         crushCandiesNewGameOnly();
         // checkForCandyCrush();
         refillCandiesBoardNewGameOnly();   
+        checkThreeAndFourCandiesMovesLeft();
     }              
 }
 
@@ -189,17 +193,20 @@ const getDroppableCandies = id => {
     //     droppableCandiesId.push(droppableCandyLeftId);
     // }
     
-    droppableCandiesId.push(
-        droppableCandyTopId, 
-        droppableCandyRightId, 
-        droppableCandyBottomId, 
-        droppableCandyLeftId,
-    );
+    // droppableCandiesId.push(
+    //     droppableCandyTopId, 
+    //     droppableCandyRightId, 
+    //     droppableCandyBottomId, 
+    //     droppableCandyLeftId,
+    // );
 
-    droppableCandiesId.forEach(candy => {
-        $(`#${candy}`).addClass("dropzone");
-    })
-    console.log("drop targets: " + droppableCandiesId);
+    // droppableCandiesId.forEach(candy => {
+    //     $(`#${candy}`).addClass("dropzone");
+    // })
+
+    // render();
+
+    // console.log("drop targets: " + droppableCandiesId);
 }
 
 const checkScorable = (id1, name1, id2, name2) => {
@@ -317,6 +324,8 @@ const crushCandies = () => {
     console.log(getComboRank());
     console.log("score: ")
     console.log(score)
+    draggables = [];
+    droppables = [];
     
     gravity();        
 } 
@@ -449,7 +458,10 @@ const checkHorzPattern1 = () => {
             const candyThird = itemBoard[j][i+2];
             if (candyFirst===candySecond && candySecond===candyThird && candyThird!=="empty") {
                 movesLeft += 1;
-                console.log(`row${j+1}col${i}`)
+                // console.log(`row${j+1}col${i}`)
+                draggables.push(`row${j+1}col${i}`);
+                droppables.push(`row${j}col${i}`);
+                
             }
         }
     }
@@ -1101,6 +1113,18 @@ const render = () => {
             $candy.attr("id", `row${j}col${i}`);
             $candy.attr("src", `./images/${itemBoard[j][i]}.jpg`);
             $candy.attr("draggable", "true");
+
+            droppables.forEach(candy => {
+                if (candy === $candy.attr("id")) {
+                    $candy.addClass("dropzone");
+                }
+            })
+
+            // draggables.forEach(candy => {
+            //     if (candy === $candy.attr("id")) {
+            //         $candy.attr("draggable", "true");
+            //     }
+            // })
             
             $row.append($candy);
 
