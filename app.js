@@ -161,20 +161,36 @@ const main = () => {
         draggedCandyName = itemBoard[candyDraggedRow][candyDraggedCol];
         console.log("dragged candy name: " + draggedCandyName);
         // calculate id of droppable candy on top of dragged candy
-        const droppableCandyTop = `row${candyDraggedRow-1}col${candyDraggedCol}`;
+        const droppableCandyTopId = `row${candyDraggedRow-1}col${candyDraggedCol}`;
+        const droppableCandyTopName = itemBoard[candyDraggedRow-1][candyDraggedCol];
+        if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyTopId, droppableCandyTopName)) {
+            droppableCandiesId.push(droppableCandyTopId);
+        }
         // right droppable candy
-        const droppableCandyRight = `row${candyDraggedRow}col${candyDraggedCol+1}`;
+        const droppableCandyRightId = `row${candyDraggedRow}col${candyDraggedCol+1}`;
+        const droppableCandyRightName = itemBoard[candyDraggedRow][candyDraggedCol+1];
+        if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyRightId, droppableCandyRightName)) {
+            droppableCandiesId.push(droppableCandyRightId);
+        }
         // bottom droppable candy
-        const droppableCandyBottom = `row${candyDraggedRow+1}col${candyDraggedCol}`;
+        const droppableCandyBottomId = `row${candyDraggedRow+1}col${candyDraggedCol}`;
+        const droppableCandyBottomName = itemBoard[candyDraggedRow+1][candyDraggedCol];
+        if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyBottomId, droppableCandyBottomName)) {
+            droppableCandiesId.push(droppableCandyBottomId);
+        }
         // left droppable candy
-        const droppableCandyLeft = `row${candyDraggedRow}col${candyDraggedCol-1}`;
+        const droppableCandyLeftId = `row${candyDraggedRow}col${candyDraggedCol-1}`;
+        const droppableCandyLeftName = itemBoard[candyDraggedRow][candyDraggedCol-1];
+        if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyLeftId, droppableCandyLeftName)) {
+            droppableCandiesId.push(droppableCandyLeftId);
+        }
         
-        droppableCandiesId.push(
-            droppableCandyTop, 
-            droppableCandyRight, 
-            droppableCandyBottom, 
-            droppableCandyLeft
-            );
+        // droppableCandiesId.push(
+        //     droppableCandyTop,/* 
+        //     droppableCandyRight, 
+        //     droppableCandyBottom, 
+        //     droppableCandyLeft*/
+        //     );
 
         droppableCandiesId.forEach(candy => {
             $(`#${candy}`).addClass("dropzone");
@@ -182,12 +198,56 @@ const main = () => {
         console.log("drop targets: " + droppableCandiesId);
     }
 
+    const checkScorable = (id1, name1, id2, name2) => {
+        console.log("ids to check are: " + id1 + " and " + id2);
+        console.log("names to check are: " + name1 + " and " + name2);
+        let scorable = false;
+        let checkingArray = itemBoard.map(item => item);;
+        // swap immediately at the start
+        const candy1Row = sliceRowNumberFromId(id2);
+        const candy1Col = sliceColNumberFromId(id2);
+        const candy1 = name1;
+        console.log("candy1: " + name2 + " row " + candy1Row + " col " + candy1Col)
+        const candy2Row = sliceRowNumberFromId(id1);
+        const candy2Col = sliceColNumberFromId(id1);
+        const candy2 = name2;
+
+        checkingArray[candy1Row][candy1Col] = candy1;
+        checkingArray[candy2Row][candy2Col] = candy2;
+
+        console.log(checkingArray);
+
+        for (let j = BOARDHEIGHT-1; j >=0; j--) {
+            for (let i=2; i < BOARDWIDTH; i++) {
+                
+                const candyFirst = checkingArray[j][i-2];
+                const candySecond = checkingArray[j][i-1];
+                const candyThird = checkingArray[j][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                      scorable = true;       
+                }
+            }}  
+        for (let j = BOARDHEIGHT-1; j >=2; j--) {
+            for (let i=0; i < BOARDWIDTH; i++) {
+                
+                const candyFirst = checkingArray[j][i];
+                const candySecond = checkingArray[j-1][i];
+                const candyThird = checkingArray[j-2][i];
+                if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
+                    scorable = true;               
+                }
+            }}      
+        console.log(scorable);
+        if (scorable===true) {
+            return true;
+        } else return false;
+    }
 
     // check for 3 or 4 in a row or col
     const checkForCandyCrush = () => {
         // map current candy array
         console.log("checking for crush");
-        let checkingArray = itemBoard;
+        let checkingArray = itemBoard.map(item => item);
         // input in new candy arrnagement and check if any candy gets crushed
         // candy1 is the dragged candy
 
@@ -961,27 +1021,27 @@ const main = () => {
 
     document.addEventListener("dragenter", event => {
         // highlight potential drop target when the draggable element enters it
-        if (event.target.classList.contains("dropzone")) {
-        // event.target.classList.add("dragover");
-            event.preventDefault();
-        }
+        // if (event.target.classList.contains("dropzone")) {
+        // // event.target.classList.add("dragover");
+        //     event.preventDefault();
+        // }
     });
 
     document.addEventListener("dragleave", event => {
         // reset background of potential drop target when the draggable element leaves it
-        if (event.target.classList.contains("dropzone")) {
-        event.target.classList.remove("dragover");
-        }
+        // if (event.target.classList.contains("dropzone")) {
+        // event.target.classList.remove("dragover");
+        // }
     });
 
     document.addEventListener("drop", event => {
         // prevent default action (open as link for some elements)
-        event.preventDefault();
+        
         const $droppable = $(event.target);
         // move dragged element to the selected drop target
         if (event.target.classList.contains("dropzone")) {
-            event.target.classList.remove("dragover");
-
+            // event.target.classList.remove("dragover");
+            event.preventDefault();
             // get candy name of drop target
             let candyDroppedOn = $droppable.attr("src");
             droppedCandyName = candyDroppedOn.slice(9, 15);
