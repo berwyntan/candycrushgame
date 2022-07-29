@@ -299,7 +299,7 @@ const checkForCandyCrush = () => {
         droppedCandyId = "";
         comboMeter += candiesToCrush.length;
         score += candiesToCrush.length;
-        setTimeout(crushCandies, 1200);
+        setTimeout(crushCandies, 1100);
     } else {
         comboMeter = 0;
         render();       
@@ -326,7 +326,7 @@ const crushCandies = () => {
     draggables = [];
     droppables = [];
     
-    gravity();        
+    setTimeout(gravity, 800);        
 } 
 
     
@@ -360,7 +360,7 @@ const gravity = () => {
     render();
     // setTimeout(checkForCandyCrush, 1500);
     // refill candies board
-    setTimeout(refillCandiesBoard, 1200);
+    setTimeout(refillCandiesBoard, 1100);
 }
 
 const refillCandiesBoard = () => {
@@ -452,7 +452,7 @@ const checkWinCon = () => {
         $(".game-board").append($("<span>").addClass("stage-end").text("STAGE CLEAR!"));
         $("img").attr("draggable", "false");
         $("img").css("cursor", "auto");
-    } else setTimeout(checkForCandyCrush, 1200);
+    } else setTimeout(checkForCandyCrush, 1000);
 }
 
 // potential scoring patterns --------------------------------
