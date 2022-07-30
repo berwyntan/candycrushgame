@@ -455,7 +455,7 @@ const checkThreeAndFourCandiesMovesLeft = () => {
 }
 
 const checkWinConForAll = () => {
-    const winCon = winConArray[stage-1].name();
+    const winCon = winConArray[stage-1].function();
     if (moves===0) {
         console.log("You are out of moves!");
     } else if (winCon===true) {
@@ -463,21 +463,51 @@ const checkWinConForAll = () => {
         $(".game-board").append($("<span>").addClass("stage-end").text("STAGE CLEAR!"));
         $("img").attr("draggable", "false");
         $("img").css("cursor", "auto");
+        stage += 1;
+        comboMeter = 0;
+        score = 0;
+        moves = 0;
+        setTimeout(showStage, 2500);
     } else setTimeout(checkForCandyCrush, 1000);
 }
 
 const winConStage1 = () => {
-    if (score>=20) {
+    if (score>=10) {
         console.log("checking win con stage 1")
+        return true;
+    } else return false;
+}
+
+const winConStage2 = () => {
+    if (score>=20) {
+        console.log("checking win con stage 2")
+        return true;
+    } else return false;
+}
+
+const winConStage3 = () => {
+    if (score>=100) {
+        console.log("checking win con stage 3")
         return true;
     } else return false;
 }
 
 const winConArray = [
     {
-        name: winConStage1,
-        text: "Get a score of 20"
+        name: "Stage 1",
+        function: winConStage1,
+        text: "Get a score of 30"
     },
+    {
+        name: "Stage 2",
+        function: winConStage2,
+        text: "Get a score of 50"
+    },
+    {
+        name: "Stage 3",
+        function: winConStage3,
+        text: "Get a score of 100"
+    }
 ]
 
 
@@ -1322,7 +1352,7 @@ const initialScreen = () => {
 
 const showStage = () => {
     $container.empty();
-    const $title = $("<h2>").text("STAGE 1");
+    const $title = $("<h2>").text(`${winConArray[stage-1].name}`);
     const $img = $("<p>").text(
         "Placeholder image"
         );
