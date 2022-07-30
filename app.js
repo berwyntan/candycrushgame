@@ -21,6 +21,14 @@ const HOWTOPLAY = [
 ];
 const $container = $(".container");
 
+// const STAGES = [
+//     {
+//         stage: 1,
+//         winCon: score >= 10,
+//     }
+// ]
+
+
 let itemBoard = [];
 
 let draggedCandyName = "";
@@ -37,6 +45,8 @@ let candiesToCrush = [];
 let comboMeter = 0;
 let score = 0;
 let moves = 0;
+
+let stage = 1;
 
 const createRandomArray = () => {
     let itemBoard = [];
@@ -441,19 +451,36 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     console.log(draggables)
     console.log("droppables: ")
     console.log(droppables)
-    checkWinCon();
+    checkWinConForAll();
 }
 
-const checkWinCon = () => {
+const checkWinConForAll = () => {
+    const winCon = winConArray[stage-1].name();
     if (moves===0) {
         console.log("You are out of moves!");
-    } else if (score>=50) {
+    } else if (winCon===true) {
         console.log("You win!");
         $(".game-board").append($("<span>").addClass("stage-end").text("STAGE CLEAR!"));
         $("img").attr("draggable", "false");
         $("img").css("cursor", "auto");
     } else setTimeout(checkForCandyCrush, 1000);
 }
+
+const winConStage1 = () => {
+    if (score>=20) {
+        console.log("checking win con stage 1")
+        return true;
+    } else return false;
+}
+
+const winConArray = [
+    {
+        name: winConStage1,
+        text: "Get a score of 20"
+    },
+]
+
+
 
 // potential scoring patterns --------------------------------
 
@@ -1218,6 +1245,7 @@ const checkVertPattern18 = () => {
     return movesLeft;
 }
 
+
     // --------------------- VIEW -----------------------------------------
 
 const render = () => {
@@ -1300,7 +1328,7 @@ const showStage = () => {
         );
     const $startButton = $("<button>").text("PLAY");
     const $howToPlay = $("<div>")
-    const $howToPlay0 = $("<div>").text("Get a score of 50");  
+    const $howToPlay0 = $("<div>").text(/*"Get a score of 50"*/winConArray[stage-1].text);  
     // const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
     // const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
     $howToPlay.append($howToPlay0); /*, $howToPlay1, $howToPlay2);*/        
