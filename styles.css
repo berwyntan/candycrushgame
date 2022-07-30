@@ -1,14 +1,14 @@
-.info {
+/* .info-1 {
     display: flex;
     flex: 1fr 1fr 1fr;
-    font-size: large;
+    font-size: medium;
     font-weight: 400;   
-    /* position: relative;  */
-    height: 28px;
+    position: relative;  
+    height: 25px;
     align-items: center;
     justify-content: center;
     gap: 20px;
-}
+} */
 
 .info-1 {
     height: 30px;

@@ -2,7 +2,7 @@
 
 // -------------------------------- MODEL -------------------------------------
 const BOARDWIDTH = 6;
-const BOARDHEIGHT = 6;
+const BOARDHEIGHT = 8;
 const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
 const COMBORANK = [
     {points: 0, rank: "", text: ""},
@@ -21,14 +21,6 @@ const HOWTOPLAY = [
 ];
 const $container = $(".container");
 
-// const STAGES = [
-//     {
-//         stage: 1,
-//         winCon: score >= 10,
-//     }
-// ]
-
-
 let itemBoard = [];
 
 let draggedCandyName = "";
@@ -45,8 +37,10 @@ let candiesToCrush = [];
 let comboMeter = 0;
 let score = 0;
 let moves = 0;
+let stylePoints = 0;
 
 let stage = 1;
+let timeLeft = 0;
 
 const createRandomArray = () => {
     let itemBoard = [];
@@ -149,11 +143,12 @@ const newGame = () => {
     for (let i=0; i<10; i++) {
         checkRow(itemBoard);
         checkCol(itemBoard);
+        
         crushCandiesNewGameOnly();
         // checkForCandyCrush();
         refillCandiesBoardNewGameOnly();   
         checkThreeAndFourCandiesMovesLeft();
-    }              
+    }    
 }
 
     // ------------------------------------ CONTROLLER ---------------------------------------
@@ -308,6 +303,9 @@ const checkForCandyCrush = () => {
         droppedCandyName = "";
         droppedCandyId = "";
         comboMeter += candiesToCrush.length;
+        if (comboMeter >= COMBORANK[COMBORANK.length-1].points) {
+            stylePoints += 1;
+        }
         score += candiesToCrush.length;
         setTimeout(crushCandies, 1100);
     } else {
@@ -465,6 +463,7 @@ const checkWinConForAll = () => {
         $("img").css("cursor", "auto");
         stage += 1;
         comboMeter = 0;
+        stylePoints = 0;
         score = 0;
         moves = 0;
         setTimeout(showStage, 2500);
@@ -472,14 +471,14 @@ const checkWinConForAll = () => {
 }
 
 const winConStage1 = () => {
-    if (score>=10) {
+    if (score>=50) {
         console.log("checking win con stage 1")
         return true;
     } else return false;
 }
 
 const winConStage2 = () => {
-    if (score>=20) {
+    if (stylePoints>=3) {
         console.log("checking win con stage 2")
         return true;
     } else return false;
@@ -1279,23 +1278,28 @@ const checkVertPattern18 = () => {
     // --------------------- VIEW -----------------------------------------
 
 const render = () => {
+
     $container.empty();
 
+    const $stage = $("<div>").addClass("stage").text(`${winConArray[stage-1].name}`);
     const $info1 = $("<div>").addClass("info-1");
     const $moves = $("<div>").addClass("moves").text(`Moves: ${moves}`);
     if (moves===0) {
         $moves.css("color", "transparent");
     };
     const $score = $("<div>").addClass("score").text(`Score: ${score}`);
-    $info1.append($moves, $score);
+    
+    $info1.append($stage, $moves, $score);
 
     const $info2 = $("<div>").addClass("info-2");
+
+    const $stylePoints = $("<span>").addClass("style-points").text(`Style points: ${stylePoints}`);
     const $comboPoints = $("<span>").addClass("combo-points").text(`${comboMeter} hit combo`);
     if (comboMeter===0) {
         $comboPoints.css("color", "transparent");
     };
     const $comboText = $("<span>").addClass("combo-text").text(`${getComboText()}`);
-    $info2.append($comboPoints, $comboText);
+    $info2.append($stylePoints, $comboPoints, $comboText);
 
     const $gameBoard = $("<div>").addClass("game-board");
     
@@ -1366,13 +1370,14 @@ const showStage = () => {
     $startButton.on("click", newGame);
 
     $container.append($title, $img, $howToPlay, $startButton);
+
 }
    
 
     // ----------------------------- GAME -----------------------------
 const main = () => { 
     // newGame();
-
+    
     // load initial screen with button for new game
     initialScreen();
 
