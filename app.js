@@ -13,12 +13,12 @@ const COMBORANK = [
     {points: 30, rank: "SSS", text: "SSStyle!!!"},
 ]
 const HOWTOPLAY = [
-    "Match 3 or more candies in a row or column",
-    "Drag a candy to switch its place",
-    "Matched candies get crushed, letting the candies above drop",
+    "Match 3 or more candies in a row or column.",
+    "Drag a candy to switch its place.",
+    "Matched candies get crushed, letting the candies above drop.",
     "Meet the objective before you run out of moves!",
-    "Chain candy crushes to unlock SSStyle",
-    "SSStyle will remove a random row of candy as long as you keep chaining crushes"
+    "Chain more than 30 candy crushes to unlock SSStyle.",
+    "SSStyle will remove a random row of candy as long as you keep chaining crushes."
 ];
 const $container = $(".container");
 

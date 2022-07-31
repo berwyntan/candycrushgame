@@ -50,8 +50,8 @@
 .game-board {
     display: flex;
     flex-direction: column;
-    background-image: url("images/background.jpg");
-    background-size: cover;
+    /* background-image: url("images/background.jpg"); */
+    /* background-size: cover; */
     padding: 10px;
     
 }
@@ -78,6 +78,11 @@
 
 body {
     text-align: center;
+    background-image: url("images/background1.jpg");
+    background-size: 1200px;
+    /* background-repeat: no-repeat; */
+    /* margin-bottom: 400px; */
+    background-color: rgb(216, 216, 216);
     
 }
 
