@@ -15,6 +15,7 @@ const COMBORANK = [
 const HOWTOPLAY = [
     "Match 3 or more candies in a row or column",
     "Drag a candy to switch its place",
+    "Matched candies get crushed, letting the candies above drop",
     "Meet the objective before you run out of moves!",
     "Chain candy crushes to unlock SSStyle",
     "SSStyle will remove a random row of candy as long as you keep chaining crushes"
@@ -45,7 +46,7 @@ const $container = $(".container");
 const stageData = [
     {
         name: "Stage 1",
-        text: "Get 50 score",
+        text: "Get Score: 50",
         description: "Score 50 points before new candies run out your moves!",
         boardheight: 6,
         boardwidth: 6,
@@ -581,10 +582,11 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     console.log("moves left: " + movesLeft);
     moves = movesLeft;
     // setTimeout(checkForCandyCrush, 1200);
+    const temp = droppables;
     draggables.forEach(candy => {
         droppables.push(candy);
     })
-    droppables.forEach(candy => {
+    temp.forEach(candy => {
         draggables.push(candy);
     })
     console.log("draggables: ")
@@ -1474,10 +1476,13 @@ const renderInitialScreen = () => {
 const renderHowToPlay = () => {
     $container.empty();
     const $title = $("<h2>").text("How to play");
-    const $img = $("<p>").text(
-        "Placeholder image"
+    const $img1 = $("<img>").addClass("htp").attr(
+        "src", "./images/htp1.png"
         );
-    const $backButton = $("<button>").text("BACK");
+    const $img2 = $("<img>").addClass("htp").attr(
+        "src", "./images/htp2.png"
+        );
+    const $backButton = $("<button>").text("BACK").css("margin-top", "10px");
     $backButton.on("click", renderInitialScreen);
 
     const $howToPlay = $("<div>")
@@ -1486,29 +1491,29 @@ const renderHowToPlay = () => {
     const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
     const $howToPlay3 = $("<div>").text(HOWTOPLAY[3]); 
     const $howToPlay4 = $("<div>").text(HOWTOPLAY[4]); 
-    $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2, $howToPlay3, $howToPlay4); 
+    const $howToPlay5 = $("<div>").text(HOWTOPLAY[5]);
+    $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2, $howToPlay3, $img2, $howToPlay4, $howToPlay5); 
 
-    $container.append($title, $img, $howToPlay, $backButton);
+    $container.append($title, $img1, $howToPlay, $backButton);
 }
 
 const renderStageInfo = () => {
     $container.empty();
     const $title = $("<h2>").text(`${stageData[stage-1].name}`);
-    const $img = $("<p>").text(
-        "Placeholder image"
-        );
-    const $startButton = $("<button>").text("START");
+    // const $img = $("<p>").text(
+    //     "Placeholder image"
+    //     );
+    const $startButton = $("<button>").text("START").css("margin-top", "10px");
     const $stageInfo = $("<div>")
-    const $infoText = $("<div>").text(/*"Get a score of 50"*/stageData[stage-1].description);  
-    // const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
-    // const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
-    $stageInfo.append($infoText); /*, $howToPlay1, $howToPlay2);*/   
-    const $quitGame = $("<button>").addClass("quit-game").text("QUIT");     
+    const $infoText = $("<div>").text(stageData[stage-1].description);  
+    
+    $stageInfo.append($infoText); 
+    const $quitGame = $("<button>").addClass("quit-game").text("QUIT").css("margin-top", "10px");     
         
     $startButton.on("click", newGame);
     $quitGame.on("click", renderInitialScreen);
 
-    $container.append($title, $img, $stageInfo, $quitGame, $startButton);
+    $container.append($title, $stageInfo, $quitGame, $startButton);
 
 }
    

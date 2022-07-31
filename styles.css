@@ -1,19 +1,23 @@
-/* .info-1 {
+.control {
     display: flex;
-    flex: 1fr 1fr 1fr;
-    font-size: medium;
-    font-weight: 400;   
-    position: relative;  
+    justify-content: right;
+}
+
+.control button{
     height: 25px;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-} */
+    padding: 5px;
+    padding-bottom: 8px;
+    font-size: 12px;
+}
+
+.objective {
+    font-size: large;
+}
 
 .info-1 {
-    height: 30px;
+    height: 25px;
     font-size: medium;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -22,11 +26,12 @@
 .info-2 {
     display: flex;
     height: 25px;
+    font-weight: 500;
     gap: 20px;
     justify-content: center;
 }
 
-img {
+.game-board img {
     width: 33px;
     height: 33px;
     margin: 3px;
@@ -45,13 +50,13 @@ img {
 .game-board {
     display: flex;
     flex-direction: column;
-    /* background-image: url("images/background.jpg"); */
-    /* background-size: cover; */
+    background-image: url("images/background.jpg");
+    background-size: cover;
     padding: 10px;
     
 }
 
-.crush {
+.game-board .crush {
     /* filter: hue-rotate(200deg); */
     border-color: red;
     /* background-color: yellow; */
@@ -67,13 +72,12 @@ img {
     
 }
 
-/* .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-} */
+.htp {
+    height: 300px;
+}
 
 body {
     text-align: center;
+    
 }
 
