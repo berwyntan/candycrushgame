@@ -27,10 +27,11 @@
 }
 
 img {
-    width: 42px;
-    height: 42px;
+    width: 33px;
+    height: 33px;
     margin: 3px;
     cursor: pointer;
+    border: 2px solid transparent;
 }
 
 .row {
@@ -51,7 +52,8 @@ img {
 }
 
 .crush {
-    filter: hue-rotate(200deg);
+    /* filter: hue-rotate(200deg); */
+    border-color: red;
     /* background-color: yellow; */
 }
 
@@ -71,4 +73,7 @@ img {
     justify-content: center;
 } */
 
+body {
+    text-align: center;
+}
 

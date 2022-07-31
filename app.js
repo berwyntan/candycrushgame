@@ -1,9 +1,7 @@
 
 
 // -------------------------------- MODEL -------------------------------------
-const BOARDWIDTH = 6;
-const BOARDHEIGHT = 8;
-const CANDIES = ["candy1", "candy2", "candy3", "candy4"];
+
 const COMBORANK = [
     {points: 0, rank: "", text: ""},
     {points: 10, rank: "D", text: "Delicious!"},
@@ -15,17 +13,97 @@ const COMBORANK = [
     {points: 30, rank: "SSS", text: "SSStyle!!!"},
 ]
 const HOWTOPLAY = [
-    "Match 3 or more candies in a row or column.",
-    "Swap a candy using drag and drop.",
-    "Meet the objective before you run out of moves!"
+    "Match 3 or more candies in a row or column",
+    "Drag a candy to switch its place",
+    "Meet the objective before you run out of moves!",
+    "Chain candy crushes to unlock SSStyle",
+    "SSStyle will remove a random row of candy as long as you keep chaining crushes"
 ];
 const $container = $(".container");
+
+// const winConStage1 = () => {
+//     if (score>=50) {
+//         console.log("checking win con stage 1")
+//         return true;
+//     } else return false;
+// }
+
+// const winConStage2 = () => {
+//     if (stylePoints>=3) {
+//         console.log("checking win con stage 2")
+//         return true;
+//     } else return false;
+// }
+
+// const winConStage3 = () => {
+//     if (score>=100) {
+//         console.log("checking win con stage 3")
+//         return true;
+//     } else return false;
+// }
+
+const stageData = [
+    {
+        name: "Stage 1",
+        text: "Get 50 score",
+        description: "Score 50 points before new candies run out your moves!",
+        boardheight: 6,
+        boardwidth: 6,
+        candiesinit: ["candy1", "candy2", "candy3", "candy4"],
+        candies: ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6"],
+        function: () => {
+            if (score>=50) {
+                console.log("checking win con stage 1")
+                return true;
+            } else return false;
+        },
+        
+    },
+    {
+        name: "Stage 2",        
+        text: "Remove all cherries",
+        description: "Get rid of the cherries in your candies! Hint: Use SSStyle",
+        boardheight: 8,
+        boardwidth: 8,
+        candiesinit: ["candy1", "candy2", "candy3", "candy4",
+                        "candy1", "candy2", "candy3", "candy4",
+                            "cherry"],
+        candies: ["candy1", "candy2", "candy3", "candy4"],
+        function: () => {
+            getCherries();
+            if (cherries===0) {
+                console.log("checking win con stage 2")
+                return true;
+            } else return false;
+        },
+    },
+    {
+        name: "Stage 3",        
+        text: "Get score: 99999",
+        boardheight: 10,
+        boardwidth: 10,
+        candiesinit: ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6", "cherry"],
+        candies: ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6"],
+        function: () => {
+            if (score>=99999) {
+                console.log("checking win con stage 3")
+                return true;
+            } else return false;
+        },
+    },
+]
+
+// default stage data
+let BOARDWIDTH = 6;
+let BOARDHEIGHT = 8;
+let CANDIESINIT = ["candy1", "candy2", "candy3", "candy4"];
+let CANDIES = ["candy1", "candy2", "candy3", "candy4"];
 
 let itemBoard = [];
 
 let draggedCandyName = "";
 let draggedCandyId = "";
-// let droppableCandiesId = [];
+let droppableCandiesId = [];
 let droppedCandyName = "";
 let droppedCandyId = "";
 
@@ -40,19 +118,26 @@ let moves = 0;
 let stylePoints = 0;
 
 let stage = 1;
-let timeLeft = 0;
+let cherries = 0;
 
 const createRandomArray = () => {
     let itemBoard = [];
     for (let j = 0; j < BOARDHEIGHT; j++) {
         let itemRow = [];
         for (let i = 0; i < BOARDWIDTH; i++) {
-            const candyRandom = CANDIES[Math.floor(Math.random() * CANDIES.length)];
+            const candyRandom = CANDIESINIT[Math.floor(Math.random() * CANDIESINIT.length)];
             itemRow[i] = candyRandom;            
         }
         itemBoard.push(itemRow);
     }
     return itemBoard;        
+}
+
+const getStageData = () => {
+    BOARDWIDTH = stageData[stage-1].boardwidth;
+    BOARDHEIGHT = stageData[stage-1].boardheight;
+    CANDIESINIT = stageData[stage-1].candiesinit;
+    CANDIES = stageData[stage-1].candies;
 }
 
 // check rows from bottom row
@@ -112,7 +197,7 @@ const refillCandiesBoardNewGameOnly = () => {
     for (let j = 0; j < BOARDHEIGHT; j++) {
         for (let i = 0; i < BOARDWIDTH; i++) {
             if (itemBoard[j][i] === "empty") {
-                const candyRandom = CANDIES[Math.floor(Math.random() * CANDIES.length)];
+                const candyRandom = CANDIESINIT[Math.floor(Math.random() * CANDIESINIT.length)];
                 itemBoard[j][i] = candyRandom;
             }}  
     
@@ -138,7 +223,22 @@ const crushCandiesNewGameOnly = () => {
     // gravity();        
 } 
 
+const getCherries = () => {
+    cherries = 0;
+    itemBoard.forEach(array => {
+        array.forEach(candy => {
+            if (candy==="cherry") {
+                cherries += 1;
+            }
+        })
+    })
+    console.log("cherries: " + cherries);
+}
+
 const newGame = () => {
+    getStageData();
+    // console.log(BOARDHEIGHT)
+    // console.log(BOARDWIDTH)
     itemBoard = createRandomArray();  
     for (let i=0; i<10; i++) {
         checkRow(itemBoard);
@@ -148,7 +248,12 @@ const newGame = () => {
         // checkForCandyCrush();
         refillCandiesBoardNewGameOnly();   
         checkThreeAndFourCandiesMovesLeft();
-    }    
+    }  
+    comboMeter = 0;
+    score = 0;
+    stylePoints = 0;
+    getCherries();
+      
 }
 
     // ------------------------------------ CONTROLLER ---------------------------------------
@@ -206,8 +311,15 @@ const getDraggedCandy = id => {
     // );
 
     // droppableCandiesId.forEach(candy => {
-    //     $(`#${candy}`).addClass("dropzone");
+    //     $(`#${candy}`).addClass("adjacent");
     // })
+
+    for (let i=0; i<droppables.length-1; i++) {
+        if (draggables[i]===id) {
+            const candyTarget = droppables[i];
+            $(`#${candyTarget}`).addClass("adjacent");
+        }
+    }
 
     // render();
 
@@ -287,34 +399,57 @@ const checkForCandyCrush = () => {
     }
     
     
-    checkRow(itemBoard);
-    checkCol(itemBoard);
-    console.log("candies to crush: " + candiesToCrush)
-    console.log("length of candies to crush array: " + candiesToCrush.length);
+    // checkRow(itemBoard);
+    // checkCol(itemBoard);
+    // console.log("candies to crush: " + candiesToCrush)
+    // console.log("length of candies to crush array: " + candiesToCrush.length);
     
     // if there are candies to crush, crush again
     if (candiesToCrush.length>2) {
         itemBoard = checkingArray;
         // checkRow(itemBoard);
         // checkCol(itemBoard);
+        
         render();
         draggedCandyName = "";
         draggedCandyId = "";
         droppedCandyName = "";
         droppedCandyId = "";
         comboMeter += candiesToCrush.length;
-        if (comboMeter >= COMBORANK[COMBORANK.length-1].points) {
-            stylePoints += 1;
-        }
+        crushRandomRow();
         score += candiesToCrush.length;
+        render();
         setTimeout(crushCandies, 1100);
     } else {
-        comboMeter = 0;
-        render();       
+        checkRow(itemBoard);
+        checkCol(itemBoard);
+        console.log("candies to crush: " + candiesToCrush)
+        console.log("length of candies to crush array: " + candiesToCrush.length);
+        if (candiesToCrush.length>2) {
+            comboMeter += candiesToCrush.length;
+            crushRandomRow();
+            score += candiesToCrush.length;            
+            render();            
+            setTimeout(crushCandies, 1100);
+        } else {
+            comboMeter = 0;            
+            render();       
+        
+        }
         
     }
     
-}          
+}    
+
+const crushRandomRow = () => {
+    if (comboMeter >= COMBORANK[COMBORANK.length-1].points) {
+        const randomRow = Math.floor(Math.random()*BOARDHEIGHT);
+        for (let i=0; i<BOARDWIDTH; i++) {
+            candiesToCrush.push(`row${randomRow}col${i}`);
+        }   
+        
+    }
+}
     
 const crushCandies = () => {
     console.log("crushing candies: " + candiesToCrush);
@@ -325,6 +460,7 @@ const crushCandies = () => {
     })
     candiesToCrush = [];
     console.log("cleared: candies to crush array " + candiesToCrush)
+    
     render();
     console.log("combo points: ")
     console.log(comboMeter)
@@ -445,15 +581,21 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     console.log("moves left: " + movesLeft);
     moves = movesLeft;
     // setTimeout(checkForCandyCrush, 1200);
+    draggables.forEach(candy => {
+        droppables.push(candy);
+    })
+    droppables.forEach(candy => {
+        draggables.push(candy);
+    })
     console.log("draggables: ")
     console.log(draggables)
     console.log("droppables: ")
-    console.log(droppables)
-    checkWinConForAll();
+    console.log(droppables)    
+    checkWinCon();
 }
 
-const checkWinConForAll = () => {
-    const winCon = winConArray[stage-1].function();
+const checkWinCon = () => {
+    const winCon = stageData[stage-1].function();
     if (moves===0) {
         console.log("You are out of moves!");
     } else if (winCon===true) {
@@ -463,51 +605,14 @@ const checkWinConForAll = () => {
         $("img").css("cursor", "auto");
         stage += 1;
         comboMeter = 0;
-        stylePoints = 0;
+        // stylePoints = 0;
         score = 0;
         moves = 0;
-        setTimeout(showStage, 2500);
+        setTimeout(renderStageInfo, 2500);
     } else setTimeout(checkForCandyCrush, 1000);
 }
 
-const winConStage1 = () => {
-    if (score>=50) {
-        console.log("checking win con stage 1")
-        return true;
-    } else return false;
-}
 
-const winConStage2 = () => {
-    if (stylePoints>=3) {
-        console.log("checking win con stage 2")
-        return true;
-    } else return false;
-}
-
-const winConStage3 = () => {
-    if (score>=100) {
-        console.log("checking win con stage 3")
-        return true;
-    } else return false;
-}
-
-const winConArray = [
-    {
-        name: "Stage 1",
-        function: winConStage1,
-        text: "Get a score of 30"
-    },
-    {
-        name: "Stage 2",
-        function: winConStage2,
-        text: "Get a score of 50"
-    },
-    {
-        name: "Stage 3",
-        function: winConStage3,
-        text: "Get a score of 100"
-    }
-]
 
 
 
@@ -1281,25 +1386,38 @@ const render = () => {
 
     $container.empty();
 
-    const $stage = $("<div>").addClass("stage").text(`${winConArray[stage-1].name}`);
+    const $gameControl = $("<div>").addClass("control");
+    const $restartLevel = $("<button>").addClass("restart-button").text("Restart Stage");
+    const $quitGame = $("<button>").addClass("quit-game").text("Quit");
+
+    $restartLevel.on("click", renderStageInfo);
+    $quitGame.on("click", renderInitialScreen);
+    $gameControl.append($restartLevel, $quitGame);
+
+    const $objective = $("<div>").addClass("objective");
+    const $stage = $("<div>").addClass("stage").text(`${stageData[stage-1].name} | ${stageData[stage-1].text}`);
+    $objective.append($stage);
+    
     const $info1 = $("<div>").addClass("info-1");
-    const $moves = $("<div>").addClass("moves").text(`Moves: ${moves}`);
+    const $moves = $("<div>").addClass("moves").text(`Moves left: ${moves}`);
     if (moves===0) {
         $moves.css("color", "transparent");
     };
     const $score = $("<div>").addClass("score").text(`Score: ${score}`);
+
+    // const $stylePoints = $("<span>").addClass("style-points").text(`Style score: ${stylePoints}`);
     
-    $info1.append($stage, $moves, $score);
+    $info1.append($moves, $score, /*$stylePoints*/);
 
     const $info2 = $("<div>").addClass("info-2");
 
-    const $stylePoints = $("<span>").addClass("style-points").text(`Style points: ${stylePoints}`);
+    
     const $comboPoints = $("<span>").addClass("combo-points").text(`${comboMeter} hit combo`);
     if (comboMeter===0) {
         $comboPoints.css("color", "transparent");
     };
     const $comboText = $("<span>").addClass("combo-text").text(`${getComboText()}`);
-    $info2.append($stylePoints, $comboPoints, $comboText);
+    $info2.append($comboPoints, $comboText);
 
     const $gameBoard = $("<div>").addClass("game-board");
     
@@ -1334,42 +1452,63 @@ const render = () => {
         $gameBoard.append($row);
     }
     
-    $container.append($info1, $info2, $gameBoard);
+    $container.append($gameControl, $objective, $info1, $info2, $gameBoard);
 }
 
-const initialScreen = () => {
+const renderInitialScreen = () => {
+    stage = 1;
+    $container.empty();
     const $title = $("<h1>").text("CANDY CRUSH");
     const $img = $("<p>").text(
         "Placeholder image"
         );
-    const $startButton = $("<button>").text("PLAY");
-    const $howToPlay = $("<div>")
-    const $howToPlay0 = $("<div>").text(HOWTOPLAY[0]);  
-    const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
-    const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
-    $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2);          
-        
-    $startButton.on("click", showStage);
+    const $startButton = $("<button>").text("PLAY");      
+    $startButton.on("click", renderStageInfo);
+
+    const $howToPlay = $("<button>").text("GAME INFO");
+    $howToPlay.on("click", renderHowToPlay);
 
     $container.append($title, $img, $howToPlay, $startButton);
 }
 
-const showStage = () => {
+const renderHowToPlay = () => {
     $container.empty();
-    const $title = $("<h2>").text(`${winConArray[stage-1].name}`);
+    const $title = $("<h2>").text("How to play");
     const $img = $("<p>").text(
         "Placeholder image"
         );
-    const $startButton = $("<button>").text("PLAY");
+    const $backButton = $("<button>").text("BACK");
+    $backButton.on("click", renderInitialScreen);
+
     const $howToPlay = $("<div>")
-    const $howToPlay0 = $("<div>").text(/*"Get a score of 50"*/winConArray[stage-1].text);  
+    const $howToPlay0 = $("<div>").text(HOWTOPLAY[0]);  
+    const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
+    const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
+    const $howToPlay3 = $("<div>").text(HOWTOPLAY[3]); 
+    const $howToPlay4 = $("<div>").text(HOWTOPLAY[4]); 
+    $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2, $howToPlay3, $howToPlay4); 
+
+    $container.append($title, $img, $howToPlay, $backButton);
+}
+
+const renderStageInfo = () => {
+    $container.empty();
+    const $title = $("<h2>").text(`${stageData[stage-1].name}`);
+    const $img = $("<p>").text(
+        "Placeholder image"
+        );
+    const $startButton = $("<button>").text("START");
+    const $stageInfo = $("<div>")
+    const $infoText = $("<div>").text(/*"Get a score of 50"*/stageData[stage-1].description);  
     // const $howToPlay1 = $("<div>").text(HOWTOPLAY[1]); 
     // const $howToPlay2 = $("<div>").text(HOWTOPLAY[2]); 
-    $howToPlay.append($howToPlay0); /*, $howToPlay1, $howToPlay2);*/        
+    $stageInfo.append($infoText); /*, $howToPlay1, $howToPlay2);*/   
+    const $quitGame = $("<button>").addClass("quit-game").text("QUIT");     
         
     $startButton.on("click", newGame);
+    $quitGame.on("click", renderInitialScreen);
 
-    $container.append($title, $img, $howToPlay, $startButton);
+    $container.append($title, $img, $stageInfo, $quitGame, $startButton);
 
 }
    
@@ -1379,7 +1518,7 @@ const main = () => {
     // newGame();
     
     // load initial screen with button for new game
-    initialScreen();
+    renderInitialScreen();
 
     
     // drag and drop code adapted from MDN
@@ -1407,11 +1546,11 @@ const main = () => {
     document.addEventListener("dragend", event => {
         // reset the transparency
         event.target.classList.remove("dragging");
-        // droppableCandiesId.forEach(candy => {
-        //     $(`#${candy}`).removeClass("dropzone");
-        //     console.log("removed dropzone from " + candy)
-        // })
-        // droppableCandiesId = [];
+        droppableCandiesId.forEach(candy => {
+            $(`#${candy}`).removeClass("adjacent");
+            console.log("removed adjacent from " + candy)
+        })
+        droppableCandiesId = [];
         // // draggedCandyName = "";
         // console.log("drop targets: " + droppableCandiesId)
         console.log("dragged candy name: " + draggedCandyName)
@@ -1448,7 +1587,8 @@ const main = () => {
         
         const $droppable = $(event.target);
         // move dragged element to the selected drop target
-        if (event.target.classList.contains("dropzone")) {
+        if (event.target.classList.contains("dropzone") && 
+            event.target.classList.contains("adjacent")) {
             // event.target.classList.remove("dragover");
             event.preventDefault();
             // get candy name of drop target
