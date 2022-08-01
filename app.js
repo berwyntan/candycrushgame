@@ -1267,7 +1267,7 @@ const render = () => {
     $container.empty();
 
     const $gameControl = $("<div>").addClass("control");
-    const $restartLevel = $("<button>").addClass("restart-button").text("Restart Stage");
+    const $restartLevel = $("<button>").addClass("restart-button").text("Restart");
     const $quitGame = $("<button>").addClass("quit-game").text("Quit");
 
     $restartLevel.on("click", renderStageInfo);
