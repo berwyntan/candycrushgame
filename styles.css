@@ -22,9 +22,12 @@ h1 {
 
 button {
     margin: 10px;
-    background-color: rgba(215, 215, 215, 0.8);
+    background-color: rgba(156, 184, 213, 0.8);
     border: 1px solid rgb(93, 93, 93);
     border-radius: 5px;
+    font-size: 20px;
+    padding: 6px;
+    cursor: pointer;
 
 }
 

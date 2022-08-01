@@ -23,27 +23,6 @@ const HOWTOPLAY = [
 ];
 const $container = $(".container");
 
-// const winConStage1 = () => {
-//     if (score>=50) {
-//         console.log("checking win con stage 1")
-//         return true;
-//     } else return false;
-// }
-
-// const winConStage2 = () => {
-//     if (stylePoints>=3) {
-//         console.log("checking win con stage 2")
-//         return true;
-//     } else return false;
-// }
-
-// const winConStage3 = () => {
-//     if (score>=100) {
-//         console.log("checking win con stage 3")
-//         return true;
-//     } else return false;
-// }
-
 const stageData = [
     {
         name: "Stage 1",
@@ -102,6 +81,7 @@ let BOARDHEIGHT = 8;
 let CANDIESINIT = ["candy1", "candy2", "candy3", "candy4"];
 let CANDIES = ["candy1", "candy2", "candy3", "candy4"];
 
+// model info
 let itemBoard = [];
 
 let draggedCandyName = "";
@@ -153,16 +133,13 @@ const checkRow = array => {
             const candySecond = array[j][i-1];
             const candyThird = array[j][i];
             if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                // itemBoard[j][i-2] = "empty";
-                // itemBoard[j][i-1] = "empty";
-                // itemBoard[j][i] = "empty";
                 candiesToCrush.push(
                     `row${j}col${i-2}`,
                     `row${j}col${i-1}`,
                     `row${j}col${i}`,
                 );
                 
-                // console.log("row " + j + "crushed");                  
+                                 
             }
         }}        
     
@@ -180,19 +157,15 @@ const checkCol = array => {
             const candySecond = array[j-1][i];
             const candyThird = array[j-2][i];
             if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-                // itemBoard[j][i] = "empty";
-                // itemBoard[j-1][i] = "empty";
-                // itemBoard[j-2][i] = "empty";
                 candiesToCrush.push(
                     `row${j}col${i}`,
                     `row${j-1}col${i}`,
                     `row${j-2}col${i}`,
                 );
-                // console.log("column " + i + "crushed");                    
+                                  
             }
-        }}
+        }}        
         
-    // render();        
 }
 
 // replaced crushed candies for new game
@@ -207,7 +180,7 @@ const refillCandiesBoardNewGameOnly = () => {
         }
     render();
     console.log("replaced crushed candies - new game")
-    // setTimeout(checkForCandyCrush, 1200);
+    
 } 
 
 const crushCandiesNewGameOnly = () => {
@@ -218,12 +191,8 @@ const crushCandiesNewGameOnly = () => {
         itemBoard[candyRow][candyCol] = "empty";
     })
     candiesToCrush = [];
-    // console.log("cleared: candies to crush array " + candiesToCrush)
-    render();
-    // console.log("itemBoard: ")
-    console.log("crushed candies: new game")
-    
-    // gravity();        
+    render();      
+        
 } 
 
 const getCherries = () => {
@@ -240,15 +209,13 @@ const getCherries = () => {
 
 const newGame = () => {
     getStageData();
-    // console.log(BOARDHEIGHT)
-    // console.log(BOARDWIDTH)
+    
     itemBoard = createRandomArray();  
     for (let i=0; i<10; i++) {
         checkRow(itemBoard);
         checkCol(itemBoard);
         
         crushCandiesNewGameOnly();
-        // checkForCandyCrush();
         refillCandiesBoardNewGameOnly();   
         checkThreeAndFourCandiesMovesLeft();
     }  
@@ -273,50 +240,10 @@ const sliceColNumberFromId = id => {
 const getDraggedCandy = id => {
     const candyDraggedRow = sliceRowNumberFromId(id);
     const candyDraggedCol = sliceColNumberFromId(id);
-    // console.log("dragged candy: " + candyDraggedRow, candyDraggedCol);
-    // get candy number of dragged candy
+    
     draggedCandyName = itemBoard[candyDraggedRow][candyDraggedCol];
     console.log("dragged candy name: " + draggedCandyName);
-    // calculate id of droppable candy on top of dragged candy
-    // const droppableCandyTopId = `row${candyDraggedRow-1}col${candyDraggedCol}`;
-    // causing undefined errors and illegal moves still work
-    // const droppableCandyTopName = itemBoard[candyDraggedRow-1][candyDraggedCol];
-    // if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyTopId, droppableCandyTopName)) {
-    //     droppableCandiesId.push(droppableCandyTopId);
-    // }
-    // right droppable candy
-    // const droppableCandyRightId = `row${candyDraggedRow}col${candyDraggedCol+1}`;
-    // causing undefined errors and illegal moves still work
-    // const droppableCandyRightName = itemBoard[candyDraggedRow][candyDraggedCol+1];
-    // if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyRightId, droppableCandyRightName)) {
-    //     droppableCandiesId.push(droppableCandyRightId);
-    // }
-    // bottom droppable candy
-    // const droppableCandyBottomId = `row${candyDraggedRow+1}col${candyDraggedCol}`;
-    // causing undefined errors and illegal moves still work
-    // const droppableCandyBottomName = itemBoard[candyDraggedRow+1][candyDraggedCol];
-    // if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyBottomId, droppableCandyBottomName)) {
-    //     droppableCandiesId.push(droppableCandyBottomId);
-    // }
-    // left droppable candy
-    // const droppableCandyLeftId = `row${candyDraggedRow}col${candyDraggedCol-1}`;
-    // causing undefined errors and illegal moves still work
-    // const droppableCandyLeftName = itemBoard[candyDraggedRow][candyDraggedCol-1];
-    // if (checkScorable(draggedCandyId, draggedCandyName, droppableCandyLeftId, droppableCandyLeftName)) {
-    //     droppableCandiesId.push(droppableCandyLeftId);
-    // }
     
-    // droppableCandiesId.push(
-    //     droppableCandyTopId, 
-    //     droppableCandyRightId, 
-    //     droppableCandyBottomId, 
-    //     droppableCandyLeftId,
-    // );
-
-    // droppableCandiesId.forEach(candy => {
-    //     $(`#${candy}`).addClass("adjacent");
-    // })
-
     for (let i=0; i<droppables.length-1; i++) {
         if (draggables[i]===id) {
             const candyTarget = droppables[i];
@@ -324,55 +251,8 @@ const getDraggedCandy = id => {
         }
     }
 
-    // render();
-
-    // console.log("drop targets: " + droppableCandiesId);
+    
 }
-
-// const checkScorable = (id1, name1, id2, name2) => {
-//     console.log("ids to check are: " + id1 + " and " + id2);
-//     console.log("names to check are: " + name1 + " and " + name2);
-//     let scorable = false;
-//     let checkingArray = itemBoard.map(item => item);;
-//     // swap immediately at the start
-//     const candy1Row = sliceRowNumberFromId(id2);
-//     const candy1Col = sliceColNumberFromId(id2);
-//     const candy1 = name1;
-//     console.log("candy1: " + name2 + " row " + candy1Row + " col " + candy1Col)
-//     const candy2Row = sliceRowNumberFromId(id1);
-//     const candy2Col = sliceColNumberFromId(id1);
-//     const candy2 = name2;
-
-//     checkingArray[candy1Row][candy1Col] = candy1;
-//     checkingArray[candy2Row][candy2Col] = candy2;
-
-//     console.log(checkingArray);
-
-//     for (let j = BOARDHEIGHT-1; j >=0; j--) {
-//         for (let i=2; i < BOARDWIDTH; i++) {
-            
-//             const candyFirst = checkingArray[j][i-2];
-//             const candySecond = checkingArray[j][i-1];
-//             const candyThird = checkingArray[j][i];
-//             if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-//                     scorable = true;       
-//             }
-//         }}  
-//     for (let j = BOARDHEIGHT-1; j >=2; j--) {
-//         for (let i=0; i < BOARDWIDTH; i++) {
-            
-//             const candyFirst = checkingArray[j][i];
-//             const candySecond = checkingArray[j-1][i];
-//             const candyThird = checkingArray[j-2][i];
-//             if (candyFirst === candySecond && candySecond === candyThird && candyThird !=="empty") {
-//                 scorable = true;               
-//             }
-//         }}      
-//     console.log(scorable);
-//     if (scorable===true) {
-//         return true;
-//     } else return false;
-// }
 
 // check for 3 or 4 in a row or col
 const checkForCandyCrush = () => {
@@ -400,19 +280,13 @@ const checkForCandyCrush = () => {
         console.log("candies to crush: " + candiesToCrush)
         console.log("length of candies to crush array: " + candiesToCrush.length);
     }
+       
     
-    
-    // checkRow(itemBoard);
-    // checkCol(itemBoard);
-    // console.log("candies to crush: " + candiesToCrush)
-    // console.log("length of candies to crush array: " + candiesToCrush.length);
     
     // if there are candies to crush, crush again
     if (candiesToCrush.length>2) {
         itemBoard = checkingArray;
-        // checkRow(itemBoard);
-        // checkCol(itemBoard);
-        
+                
         render();
         draggedCandyName = "";
         draggedCandyId = "";
@@ -486,7 +360,7 @@ const crushCandies = () => {
 
 // pushes candies to the 'floor'   
 const gravity = () => {
-    // console.log("gravity board: ")
+    
     // map the itemBoard
     let initialBoard = itemBoard;    
 
@@ -505,13 +379,12 @@ const gravity = () => {
         }               
         gravityBoard.push(newColumn);
     })
-    // console.log(gravityBoard);
-
+    
     // itemboard copys the mapped array
     
     itemBoard = gravityBoard[0].map((_, colIndex) => gravityBoard.map(row => row[colIndex]));
     render();
-    // setTimeout(checkForCandyCrush, 1500);
+    
     // refill candies board
     setTimeout(refillCandiesBoard, 1100);
 }
@@ -589,7 +462,7 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     movesLeft += checkVertPattern18();
     console.log("moves left: " + movesLeft);
     moves = movesLeft;
-    // setTimeout(checkForCandyCrush, 1200);
+    
     const temp = droppables;
     draggables.forEach(candy => {
         droppables.push(candy);
@@ -616,15 +489,11 @@ const checkWinCon = () => {
         $("img").css("cursor", "auto");
         stage += 1;
         comboMeter = 0;
-        // stylePoints = 0;
         score = 0;
         moves = 0;
         setTimeout(renderStageInfo, 2500);
     } else setTimeout(checkForCandyCrush, 1000);
 }
-
-
-
 
 
 // potential scoring patterns --------------------------------
@@ -1415,13 +1284,10 @@ const render = () => {
         $moves.css("color", "transparent");
     };
     const $score = $("<div>").addClass("score").text(`Score: ${score}`);
-
-    // const $stylePoints = $("<span>").addClass("style-points").text(`Style score: ${stylePoints}`);
-    
+        
     $info1.append($moves, $score, /*$stylePoints*/);
 
     const $info2 = $("<div>").addClass("info-2");
-
     
     const $comboPoints = $("<span>").addClass("combo-points").text(`${comboMeter} hit combo`);
     if (comboMeter===0) {
@@ -1438,8 +1304,7 @@ const render = () => {
             const $candy = $("<img>");
             $candy.attr("id", `row${j}col${i}`);
             $candy.attr("src", `./images/${itemBoard[j][i]}.jpg`);
-            // $candy.attr("draggable", "true");
-
+            
             droppables.forEach(candy => {
                 if (candy === $candy.attr("id")) {
                     $candy.addClass("dropzone");
@@ -1470,9 +1335,7 @@ const renderInitialScreen = () => {
     stage = 1;
     $container.empty();
     const $title = $("<h1>").text("CANDY CRUSH");
-    // const $img = $("<p>").text(
-    //     "Placeholder image"
-    //     );
+    
     const $startButton = $("<button>").text("PLAY");      
     $startButton.on("click", renderStageInfo);
 
@@ -1509,9 +1372,7 @@ const renderHowToPlay = () => {
 const renderStageInfo = () => {
     $container.empty();
     const $title = $("<h2>").text(`${stageData[stage-1].name}`);
-    // const $img = $("<p>").text(
-    //     "Placeholder image"
-    //     );
+    
     const $startButton = $("<button>").text("START").css("margin-top", "10px");
     const $stageInfo = $("<div>")
     const $infoText = $("<div>").text(stageData[stage-1].description);  
@@ -1529,14 +1390,9 @@ const renderStageInfo = () => {
 const renderLoseGame = () => {
     $container.empty();
     const $title = $("<h2>").text(`You ran out of moves!`);
-    // const $img = $("<p>").text(
-    //     "Placeholder image"
-    //     );
-    const $startButton = $("<button>").text("RETRY").css("margin-top", "10px");
-    // const $stageInfo = $("<div>")
-    // const $infoText = $("<div>").text(stageData[stage-1].description);  
     
-    // $stageInfo.append($infoText); 
+    const $startButton = $("<button>").text("RETRY").css("margin-top", "10px");
+    
     const $quitGame = $("<button>").addClass("quit-game").text("QUIT").css("margin-top", "10px");     
         
     $startButton.on("click", renderStageInfo);
@@ -1549,11 +1405,9 @@ const renderLoseGame = () => {
 
     // ----------------------------- GAME -----------------------------
 const main = () => { 
-    // newGame();
     
     // load initial screen with button for new game
     renderInitialScreen();
-
     
     // drag and drop code adapted from MDN
 
@@ -1572,9 +1426,8 @@ const main = () => {
         // get id of dragged candy
         draggedCandyId = $dragged.attr("id");
         console.log("dragging candy " + draggedCandyId);
-        getDraggedCandy(draggedCandyId);        
-                
-
+        getDraggedCandy(draggedCandyId);      
+        
     });
 
     document.addEventListener("dragend", event => {
@@ -1634,16 +1487,7 @@ const main = () => {
             droppedCandyId = $droppable.attr("id");
             console.log("dropped onto: " + droppedCandyId)
 
-            // clear droppable candies array and class
-            // droppableCandiesId.forEach(candy => {
-            //     $(`#${candy}`).removeClass("dropzone");
-            //     console.log("removed dropzone from " + candy)
-            // })
-            // droppableCandiesId = [];
-            // console.log("drop targets: " + droppableCandiesId);
-            
             checkForCandyCrush();
-
 
             // $dragged.parentNode.removeChild($dragged);
             // event.target.appendChild($dragged);
