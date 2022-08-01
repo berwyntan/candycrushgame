@@ -463,13 +463,6 @@ const checkThreeAndFourCandiesMovesLeft = () => {
     console.log("moves left: " + movesLeft);
     moves = movesLeft;
     
-    const temp = droppables;
-    draggables.forEach(candy => {
-        droppables.push(candy);
-    })
-    temp.forEach(candy => {
-        draggables.push(candy);
-    })
     console.log("draggables: ")
     console.log(draggables)
     console.log("droppables: ")
@@ -1308,12 +1301,14 @@ const render = () => {
             droppables.forEach(candy => {
                 if (candy === $candy.attr("id")) {
                     $candy.addClass("dropzone");
+                    $candy.attr("draggable", "true");
                 }
             })
 
             draggables.forEach(candy => {
                 if (candy === $candy.attr("id")) {
                     $candy.attr("draggable", "true");
+                    $candy.addClass("dropzone");
                 }
             })           
             

@@ -4,6 +4,7 @@
 - HTML
 - CSS
 - JavaScript
+- JQuery
 - Git & GitHub
 
 ### Description
@@ -20,8 +21,13 @@ Players drag a candy to swap its position. A candy can only be swapped if it lea
 The candy can only be swapped with those that are adjacent to it. At the top, bottom, left and right.
 If the player runs out of candies to swap, the game is over.
 
+I have added my own spin to the game by creating a Sugar Crush Mode if the player crushes 
+30 candies in a row continuously. The game will then randomly crush 1 row of candies, which builds up momentum leading to a feedback loop of more candies getting crushed leading to more possible matches and in turn more crushes. This idea was taken from the style rank mechanic of Devil May Cry games.
+
+Sugar Crush Mode is needed to complete the 2nd and 3rd stage of the game.
+
 ### Wireframe
-!(https://candycrushgame-alpha.vercel.app/wireframe.jpg)
+![wireframe](/wireframe.jpg)
 
 ### Game Architecture
 
