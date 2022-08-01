@@ -1,3 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Shadows+Into+Light&display=swap');
+
+body {
+    text-align: center;
+    background-image: url("images/background1.jpg");
+    background-size: 1600px;
+    /* background-repeat: no-repeat; */
+    /* margin-bottom: 400px; */
+    background-color: rgb(216, 216, 216);    
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    background-color: rgb(240, 255, 255, 0.8);
+    margin: 0;
+}
+
+h1 {
+    font-family: 'Shadows Into Light', cursive;
+    margin-bottom: 50px;
+}
+
+button {
+    margin: 10px;
+    background-color: rgba(215, 215, 215, 0.8);
+    border: 1px solid rgb(93, 93, 93);
+    border-radius: 5px;
+
+}
+
 .control {
     display: flex;
     justify-content: right;
@@ -7,6 +37,7 @@
     height: 25px;
     padding: 5px;
     padding-bottom: 8px;
+    font-family: 'Roboto', sans-serif;
     font-size: 12px;
 }
 
@@ -43,7 +74,7 @@
     display: flex;
     justify-content: center;
     background-color: white;
-    width: 350px;
+    /* width: 350px; */
     margin: auto;
 }
 
@@ -73,16 +104,9 @@
 }
 
 .htp {
-    height: 300px;
+    width: 30%;
+    margin: auto 15px;
 }
 
-body {
-    text-align: center;
-    background-image: url("images/background1.jpg");
-    background-size: 1200px;
-    /* background-repeat: no-repeat; */
-    /* margin-bottom: 400px; */
-    background-color: rgb(216, 216, 216);
-    
-}
+
 

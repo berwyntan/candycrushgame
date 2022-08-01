@@ -10,15 +10,16 @@ const COMBORANK = [
     {points: 19, rank: "A", text: "Awesome!"},
     {points: 22, rank: "S", text: "Sweet!"},
     {points: 25, rank: "SS", text: "Super!!"},
-    {points: 30, rank: "SSS", text: "SSStyle!!!"},
+    {points: 30, rank: "SSS", text: "Sugar Crush Mode!"},
+    {points: 100, rank: "Vergil", text: "MOTIVATED"},
 ]
 const HOWTOPLAY = [
     "Match 3 or more candies in a row or column.",
     "Drag a candy to switch its place.",
     "Matched candies get crushed, letting the candies above drop.",
     "Meet the objective before you run out of moves!",
-    "Chain more than 30 candy crushes to unlock SSStyle.",
-    "SSStyle will remove a random row of candy as long as you keep chaining crushes."
+    "Chain more than 30 candy crushes to unlock Sugar Crush Mode.",
+    "Sugar Crush Mode will remove a random row of candy as long as you keep chaining crushes."
 ];
 const $container = $(".container");
 
@@ -63,7 +64,7 @@ const stageData = [
     {
         name: "Stage 2",        
         text: "Remove all cherries",
-        description: "Get rid of the cherries in your candies! Hint: Use SSStyle",
+        description: "Get rid of all the cherries in your candies! Hint: Use Sugar Crush Mode",
         boardheight: 8,
         boardwidth: 8,
         candiesinit: ["candy1", "candy2", "candy3", "candy4",
@@ -80,13 +81,14 @@ const stageData = [
     },
     {
         name: "Stage 3",        
-        text: "Get score: 99999",
+        text: "Get score: 9999",
+        description: "Have fun",
         boardheight: 10,
         boardwidth: 10,
-        candiesinit: ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6", "cherry"],
-        candies: ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6"],
+        candiesinit: ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6"],
+        candies: ["candy1", "candy2", "candy3", "candy4"],
         function: () => {
-            if (score>=99999) {
+            if (score>=9999) {
                 console.log("checking win con stage 3")
                 return true;
             } else return false;
@@ -443,12 +445,18 @@ const checkForCandyCrush = () => {
 }    
 
 const crushRandomRow = () => {
-    if (comboMeter >= COMBORANK[COMBORANK.length-1].points) {
+    if (comboMeter >= COMBORANK[COMBORANK.length-2].points) {
         const randomRow = Math.floor(Math.random()*BOARDHEIGHT);
         for (let i=0; i<BOARDWIDTH; i++) {
             candiesToCrush.push(`row${randomRow}col${i}`);
-        }   
-        
+        }           
+    }
+    if (comboMeter >= COMBORANK[COMBORANK.length-1].points) {
+        const lastRow = BOARDHEIGHT-1;
+        for (let i=0; i<BOARDWIDTH; i++) {
+            candiesToCrush.push(`row${lastRow}col${i}`);
+            console.log("100+ hit combo")
+        }           
     }
 }
     
@@ -600,6 +608,7 @@ const checkWinCon = () => {
     const winCon = stageData[stage-1].function();
     if (moves===0) {
         console.log("You are out of moves!");
+        renderLoseGame();
     } else if (winCon===true) {
         console.log("You win!");
         $(".game-board").append($("<span>").addClass("stage-end").text("STAGE CLEAR!"));
@@ -1461,16 +1470,16 @@ const renderInitialScreen = () => {
     stage = 1;
     $container.empty();
     const $title = $("<h1>").text("CANDY CRUSH");
-    const $img = $("<p>").text(
-        "Placeholder image"
-        );
+    // const $img = $("<p>").text(
+    //     "Placeholder image"
+    //     );
     const $startButton = $("<button>").text("PLAY");      
     $startButton.on("click", renderStageInfo);
 
-    const $howToPlay = $("<button>").text("GAME INFO");
+    const $howToPlay = $("<button>").text("GUIDE");
     $howToPlay.on("click", renderHowToPlay);
 
-    $container.append($title, $img, $howToPlay, $startButton);
+    $container.append($title, $howToPlay, $startButton);
 }
 
 const renderHowToPlay = () => {
@@ -1492,9 +1501,9 @@ const renderHowToPlay = () => {
     const $howToPlay3 = $("<div>").text(HOWTOPLAY[3]); 
     const $howToPlay4 = $("<div>").text(HOWTOPLAY[4]); 
     const $howToPlay5 = $("<div>").text(HOWTOPLAY[5]);
-    $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2, $howToPlay3, $img2, $howToPlay4, $howToPlay5); 
+    $howToPlay.append($howToPlay0, $howToPlay1, $howToPlay2, $howToPlay3, $howToPlay4, $howToPlay5, $backButton); 
 
-    $container.append($title, $img1, $howToPlay, $backButton);
+    $container.append($title, /*$img1,*/ $howToPlay, $img2);
 }
 
 const renderStageInfo = () => {
@@ -1514,6 +1523,26 @@ const renderStageInfo = () => {
     $quitGame.on("click", renderInitialScreen);
 
     $container.append($title, $stageInfo, $quitGame, $startButton);
+
+}
+
+const renderLoseGame = () => {
+    $container.empty();
+    const $title = $("<h2>").text(`You ran out of moves!`);
+    // const $img = $("<p>").text(
+    //     "Placeholder image"
+    //     );
+    const $startButton = $("<button>").text("RETRY").css("margin-top", "10px");
+    // const $stageInfo = $("<div>")
+    // const $infoText = $("<div>").text(stageData[stage-1].description);  
+    
+    // $stageInfo.append($infoText); 
+    const $quitGame = $("<button>").addClass("quit-game").text("QUIT").css("margin-top", "10px");     
+        
+    $startButton.on("click", renderStageInfo);
+    $quitGame.on("click", renderInitialScreen);
+
+    $container.append($title, $quitGame, $startButton);
 
 }
    
