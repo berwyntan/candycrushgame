@@ -11,8 +11,7 @@ This is my first project for General Assembly's Software Engineering Immersive F
 ### Description
 Candy Crush Saga is a puzzle game that involves making matches of 3 or more colored candy pieces. 
 Players swap candy pieces either horizontally and vertically, and once a match is made, the candy disappears, 
-causing the surrounding pieces of candy to fall into the empty spaces.
-Released by King in 2012, it is played by millions around the world.
+causing the surrounding pieces of candy to fall into the empty spaces. Released by King in 2012, it is played by millions around the world.
 
 ### Deployment
 https://candycrushgame-alpha.vercel.app/
@@ -28,7 +27,8 @@ I have added my own spin to the game by creating a Sugar Crush Mode if the playe
 Sugar Crush Mode is needed to complete the 2nd and 3rd stage of the game.
 
 ### Wireframe
-![wireframe](/wireframe.jpg)
+<!-- ![wireframe](/wireframe.jpg) -->
+<img src="./wireframe.jpg" alt="wireframe" width="300">
 
 The main parts of the game are:
 1. creating the board of candies
@@ -55,10 +55,10 @@ Document Object Model using Javascript and JQuery is used for rendering.
 Functions to check points 3 to 8 of the wireframe above and then update the model.
 
 ### Approach to Development
-I take incremental steps and apply the simplest possible solution every step of the way.
-If I change any code, I would comment it out and add the new code below it for reference.
-There will be frequent console logs to check whether the outputs of all the functions are working as intended.
-If I am making drastic changes to the code, I will create a new branch out from the master branch to avoid breaking down the entire game.
+- Take incremental steps and apply the simplest possible solution every step of the way.
+- If I change any code, comment it out and add the new code below it for reference.
+- Many console logs to check whether the outputs of all the functions are working as intended.
+- If making drastic changes to the code, I will create a new branch out from the master branch to avoid breaking down the entire game.
 
 ### Key Learnings
 - Learning how to implement the drag and drop functions like dragstart, dragover, dragenter and drop. My understanding of these functions is still superficial.
@@ -66,6 +66,24 @@ If I am making drastic changes to the code, I will create a new branch out from 
 - Viewing things from the player's perspective, like how to show the player that the candies remaining are sliding down and that it is not just a new board of randomly generated candies. This led to writing the functions with the player in mind.
 
 ### Breakdown & Analysis of the Codes
+#### Creating the Model Array
+An array called *itemBoard* represents the game. For example, the first candy in the top left corner of the board will be *itemBoard[0][0] = candy1*. The candy below it is *itemBoard[1][0] = candy2*. The third candy from the top is *itemBoard[2][0] = candy5*.
+
+#### Rendering the View
+For loops to iterate through *itemBoard* then create an image file based on the candy name. There are also conditionals to assign additional properties to the image, like draggable, droppable, whether its css should be changed to show that it is going to be crushed.
+##### Creating the Visual Feel of Candies Falling
+I use *setTimeout* on the controller functions, so the player will see the candies getting crushed and disappearing. Then the candies above are suspended in midair for a short while before falling to the ground.
+
+#### Controllers to Manipulate the Model 
+##### Implementing Drag and Drop
+
+##### Checking for Matches
+Iterate through the array using for loops to check every possible scoring combination. Two functions, *checkCol* and *checkRow* check the vertical and horizontal combinations respectively. If a matching combination is found, the location of the candies get stored in an array called *candiesToCrush*. If *itemBoard[1][0]* needs to be crushed, *candiesToCrush* gets pushed a string *"row1col0"*.
+##### Crushing Candies
+Use array callbacks and slicing on *candiesToCrush* to access *itemBoard* and crush candies by replacing them to from say *"candy1"* to *"empty"*. There is an image file of the background color called *empty.jpg* to create the appearance of the candy disappearing. Then call the *render* function.
+##### Making the Candies Fall
+Tranpose *itemBoard* so that the next step of unshifting will be easier because the candies will get "pushed" towards the ground and not to the right. Use the filter callback to remove all instances of *"empty"* from the model. Then unshift *"empty"* into *itemBoard* until it has the right number of rows and columns before transposing back.
+
 
 ### Future Developments / Improvements
 
