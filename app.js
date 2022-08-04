@@ -57,8 +57,8 @@ const stageData = [
 ]
 
 // default stage data
-let BOARDWIDTH = 6;
-let BOARDHEIGHT = 8;
+let BOARDWIDTH = 0;
+let BOARDHEIGHT = 0;
 let CANDIESINIT = ["candy1", "candy2", "candy3", "candy4"];
 let CANDIES = ["candy1", "candy2", "candy3", "candy4"];
 
@@ -121,14 +121,11 @@ const checkRow = array => {
                     `row${j}col${i-2}`,
                     `row${j}col${i-1}`,
                     `row${j}col${i}`,
-                );
-                
+                );               
                                  
             }
         }}        
     
-    // render();       
-        
 }
 
 // check col from bottom row
@@ -195,7 +192,7 @@ const newGame = () => {
     getStageData();
     
     itemBoard = createRandomArray();  
-    for (let i=0; i<10; i++) {
+    for (let i=0; i<5; i++) {
         checkRow(itemBoard);
         checkCol(itemBoard);
         
@@ -311,12 +308,14 @@ const checkForCandyCrush = () => {
 }    
 
 const crushRandomRow = () => {
+    // sugar crush mode
     if (comboMeter >= COMBORANK[COMBORANK.length-2].points) {
         const randomRow = Math.floor(Math.random()*BOARDHEIGHT);
         for (let i=0; i<BOARDWIDTH; i++) {
             candiesToCrush.push(`row${randomRow}col${i}`);
         }           
     }
+    // bonus hidden mode
     if (comboMeter >= COMBORANK[COMBORANK.length-1].points) {
         const lastRow = BOARDHEIGHT-1;
         for (let i=0; i<BOARDWIDTH; i++) {
@@ -347,7 +346,6 @@ const crushCandies = () => {
     
     setTimeout(gravity, 800);        
 } 
-
     
 
 // pushes candies to the 'floor'   
@@ -1394,22 +1392,22 @@ const renderLoseGame = () => {
     // ----------------------------- GAME -----------------------------
 const main = () => { 
     
-    // load initial screen with button for new game
+    // load starting screen
     renderInitialScreen();
     
     // drag and drop code adapted from MDN
 
     /* events fired on the draggable target */
-    document.addEventListener("drag", event => {
+    // document.addEventListener("drag", event => {
         // console.log("dragging");
         // const candyId = event.target;             
-    });
+    // });
 
     document.addEventListener("dragstart", event => {
         // store a ref. on the dragged elem
         const $dragged = $(event.target);
         // make it half transparent
-        event.target.classList.add("dragging");
+        // event.target.classList.add("dragging");
         // console.log(event.target)
         // get id of dragged candy
         draggedCandyId = $dragged.attr("id");
@@ -1420,7 +1418,7 @@ const main = () => {
 
     document.addEventListener("dragend", event => {
         // reset the transparency
-        event.target.classList.remove("dragging");
+        // event.target.classList.remove("dragging");
         // droppableCandiesId.forEach(candy => {
         //     $(`#${candy}`).removeClass("adjacent");
         //     console.log("removed adjacent from " + candy)
@@ -1436,7 +1434,7 @@ const main = () => {
     document.addEventListener("dragover", event => {
         // prevent default to allow drop 
         
-        if (event.target.classList.contains("dropzone")) {
+        if (event.target.classList.contains("adjacent")) {
             // event.target.classList.add("dragover");
             event.preventDefault();}
             // if id of candy is next to candy being dragged, preventDefault
@@ -1444,17 +1442,17 @@ const main = () => {
 
     document.addEventListener("dragenter", event => {
         // highlight potential drop target when the draggable element enters it
-        // if (event.target.classList.contains("dropzone")) {
-        // // event.target.classList.add("dragover");
-        //     event.preventDefault();
-        // }
+        if (event.target.classList.contains("adjacent")) {
+            // event.target.classList.add("dragover");
+            event.preventDefault();
+        }
     });
 
     document.addEventListener("dragleave", event => {
         // reset background of potential drop target when the draggable element leaves it
-        // if (event.target.classList.contains("dropzone")) {
-        // event.target.classList.remove("dragover");
-        // }
+        if (event.target.classList.contains("adjacent")) {
+        event.target.classList.remove("dragover");
+        }
     });
 
     document.addEventListener("drop", event => {
