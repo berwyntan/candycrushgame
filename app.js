@@ -98,10 +98,13 @@ let candiesToCrush = [];
 let comboMeter = 0;
 let score = 0;
 let moves = 0;
-let stylePoints = 0;
 
 let stage = 1;
 let cherries = 0;
+
+const resetToStageOne = () => {
+    stage = 1;
+}
 
 const createRandomArray = () => {
     let itemBoard = [];
@@ -220,8 +223,7 @@ const newGame = () => {
         checkThreeAndFourCandiesMovesLeft();
     }  
     comboMeter = 0;
-    score = 0;
-    stylePoints = 0;
+    score = 0;    
     getCherries();
       
 }
@@ -474,7 +476,7 @@ const checkWinCon = () => {
     const winCon = stageData[stage-1].function();
     if (moves===0) {
         console.log("You are out of moves!");
-        renderLoseGame();
+        setTimeout(renderLoseGame, 1350);
     } else if (winCon===true) {
         console.log("You win!");
         $(".game-board").append($("<span>").addClass("stage-end").text("STAGE CLEAR!"));
@@ -487,6 +489,7 @@ const checkWinCon = () => {
         setTimeout(renderStageInfo, 2500);
     } else setTimeout(checkForCandyCrush, 1000);
 }
+
 
 
 // potential scoring patterns --------------------------------
@@ -1327,7 +1330,7 @@ const render = () => {
 }
 
 const renderInitialScreen = () => {
-    stage = 1;
+    resetToStageOne();
     $container.empty();
     const $title = $("<h1>").text("CANDY CRUSH");
     
