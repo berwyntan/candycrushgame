@@ -1,26 +1,7 @@
 
-
 // -------------------------------- MODEL -------------------------------------
+import { COMBORANK, HOWTOPLAY } from "./data.js";
 
-const COMBORANK = [
-    {points: 0, rank: "", text: ""},
-    {points: 10, rank: "D", text: "Delicious!"},
-    {points: 13, rank: "C", text: "Crazy!"},
-    {points: 16, rank: "B", text: "Breathtaking!"},
-    {points: 19, rank: "A", text: "Awesome!"},
-    {points: 22, rank: "S", text: "Sweet!"},
-    {points: 25, rank: "SS", text: "Super!!"},
-    {points: 30, rank: "SSS", text: "Sugar Crush Mode!"},
-    {points: 100, rank: "Vergil", text: "MOTIVATED"},
-]
-const HOWTOPLAY = [
-    "Match 3 or more candies in a row or column.",
-    "Drag a candy to switch its place.",
-    "Matched candies get crushed, letting the candies above drop.",
-    "Meet the objective before you run out of moves!",
-    "Chain more than 30 candy crushes to unlock Sugar Crush Mode.",
-    "Sugar Crush Mode will remove a random row of candy as long as you keep chaining crushes."
-];
 const $container = $(".container");
 
 const stageData = [
@@ -246,10 +227,19 @@ const getDraggedCandy = id => {
     draggedCandyName = itemBoard[candyDraggedRow][candyDraggedCol];
     console.log("dragged candy name: " + draggedCandyName);
     
-    for (let i=0; i<droppables.length-1; i++) {
+    for (let i=0; i<droppables.length; i++) {
         if (draggables[i]===id) {
             const candyTarget = droppables[i];
             $(`#${candyTarget}`).addClass("adjacent");
+            droppableCandiesId.push(candyTarget);
+        }
+    }
+
+    for (let i=0; i<droppables.length; i++) {
+        if (droppables[i]===id) {
+            const candyTarget = draggables[i];
+            $(`#${candyTarget}`).addClass("adjacent");
+            droppableCandiesId.push(candyTarget);
         }
     }
 
@@ -501,7 +491,7 @@ const checkWinCon = () => {
 const checkHorzPattern1 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-3; i++) {
+        for (let i=0; i<=BOARDWIDTH-3; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -522,7 +512,7 @@ const checkHorzPattern1 = () => {
 const checkHorzPattern2 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-3; i++) {
+        for (let i=0; i<=BOARDWIDTH-3; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -542,7 +532,7 @@ const checkHorzPattern2 = () => {
 const checkHorzPattern3 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-3; i++) {
+        for (let i=0; i<=BOARDWIDTH-3; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -562,7 +552,7 @@ const checkHorzPattern3 = () => {
 const checkHorzPattern4 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-3; i++) {
+        for (let i=0; i<=BOARDWIDTH-3; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -582,7 +572,7 @@ const checkHorzPattern4 = () => {
 const checkHorzPattern5 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-3; i++) {
+        for (let i=0; i<=BOARDWIDTH-3; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -602,7 +592,7 @@ const checkHorzPattern5 = () => {
 const checkHorzPattern6 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-3; i++) {
+        for (let i=0; i<=BOARDWIDTH-3; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -623,7 +613,7 @@ const checkHorzPattern6 = () => {
 const checkHorzPattern7 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -644,7 +634,7 @@ const checkHorzPattern7 = () => {
 const checkHorzPattern8 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -665,7 +655,7 @@ const checkHorzPattern8 = () => {
 const checkHorzPattern9 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -686,7 +676,7 @@ const checkHorzPattern9 = () => {
 const checkHorzPattern10 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -707,7 +697,7 @@ const checkHorzPattern10 = () => {
 const checkHorzPattern11 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -728,7 +718,7 @@ const checkHorzPattern11 = () => {
 const checkHorzPattern12 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -749,7 +739,7 @@ const checkHorzPattern12 = () => {
 const checkHorzPattern13 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -770,7 +760,7 @@ const checkHorzPattern13 = () => {
 const checkHorzPattern14 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-2; j>=1; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j+1][i];
             const candySecond = itemBoard[j+1][i+1];
             const candyThird = itemBoard[j+1][i+2];
@@ -792,7 +782,7 @@ const checkHorzPattern14 = () => {
 const checkHorzPattern15 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=0; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+2];
             const candyThird = itemBoard[j][i+3];
@@ -812,7 +802,7 @@ const checkHorzPattern15 = () => {
 const checkHorzPattern16 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=0; j--) {
-        for (let i=0; i<BOARDWIDTH-4; i++) {
+        for (let i=0; i<=BOARDWIDTH-4; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j][i+3];
@@ -832,7 +822,7 @@ const checkHorzPattern16 = () => {
 const checkHorzPattern17 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=0; j--) {
-        for (let i=0; i<BOARDWIDTH-5; i++) {
+        for (let i=0; i<=BOARDWIDTH-5; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+2];
             const candyThird = itemBoard[j][i+3];
@@ -854,7 +844,7 @@ const checkHorzPattern17 = () => {
 const checkHorzPattern18 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=0; j--) {
-        for (let i=0; i<BOARDWIDTH-5; i++) {
+        for (let i=0; i<=BOARDWIDTH-5; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j][i+1];
             const candyThird = itemBoard[j][i+2];
@@ -880,7 +870,7 @@ const checkHorzPattern18 = () => {
 const checkVertPattern1 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=2; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i];
@@ -900,7 +890,7 @@ const checkVertPattern1 = () => {
 const checkVertPattern2 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=2; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i];
@@ -920,7 +910,7 @@ const checkVertPattern2 = () => {
 const checkVertPattern3 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=2; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i+1];
@@ -940,7 +930,7 @@ const checkVertPattern3 = () => {
 const checkVertPattern4 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=2; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i+1];
@@ -960,7 +950,7 @@ const checkVertPattern4 = () => {
 const checkVertPattern5 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=2; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i+1];
@@ -980,7 +970,7 @@ const checkVertPattern5 = () => {
 const checkVertPattern6 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=2; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i];
@@ -1001,7 +991,7 @@ const checkVertPattern6 = () => {
 const checkVertPattern7 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i];
@@ -1023,7 +1013,7 @@ const checkVertPattern7 = () => {
 const checkVertPattern8 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i];
@@ -1045,7 +1035,7 @@ const checkVertPattern8 = () => {
 const checkVertPattern9 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i+1];
@@ -1067,7 +1057,7 @@ const checkVertPattern9 = () => {
 const checkVertPattern10 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i];
@@ -1089,7 +1079,7 @@ const checkVertPattern10 = () => {
 const checkVertPattern11 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i+1];
@@ -1111,7 +1101,7 @@ const checkVertPattern11 = () => {
 const checkVertPattern12 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i+1];
@@ -1133,7 +1123,7 @@ const checkVertPattern12 = () => {
 const checkVertPattern13 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i];
@@ -1155,7 +1145,7 @@ const checkVertPattern13 = () => {
 const checkVertPattern14 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i+1];
             const candySecond = itemBoard[j-1][i+1];
             const candyThird = itemBoard[j-2][i+1];
@@ -1177,7 +1167,7 @@ const checkVertPattern14 = () => {
 const checkVertPattern15 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-3][i];
@@ -1197,7 +1187,7 @@ const checkVertPattern15 = () => {
 const checkVertPattern16 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=3; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-2][i];
             const candyThird = itemBoard[j-3][i];
@@ -1216,7 +1206,7 @@ const checkVertPattern16 = () => {
 const checkVertPattern17 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=4; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-1][i];
             const candyThird = itemBoard[j-2][i];
@@ -1237,7 +1227,7 @@ const checkVertPattern17 = () => {
 const checkVertPattern18 = () => {
     let movesLeft = 0;
     for (let j=BOARDHEIGHT-1; j>=4; j--) {
-        for (let i=0; i<BOARDWIDTH-1; i++) {
+        for (let i=0; i<=BOARDWIDTH-1; i++) {
             const candyFirst = itemBoard[j][i];
             const candySecond = itemBoard[j-2][i];
             const candyThird = itemBoard[j-3][i];
@@ -1431,11 +1421,11 @@ const main = () => {
     document.addEventListener("dragend", event => {
         // reset the transparency
         event.target.classList.remove("dragging");
-        droppableCandiesId.forEach(candy => {
-            $(`#${candy}`).removeClass("adjacent");
-            console.log("removed adjacent from " + candy)
-        })
-        droppableCandiesId = [];
+        // droppableCandiesId.forEach(candy => {
+        //     $(`#${candy}`).removeClass("adjacent");
+        //     console.log("removed adjacent from " + candy)
+        // })
+        // droppableCandiesId = [];
         // // draggedCandyName = "";
         // console.log("drop targets: " + droppableCandiesId)
         console.log("dragged candy name: " + draggedCandyName)
@@ -1484,6 +1474,12 @@ const main = () => {
             // get id of drop target
             droppedCandyId = $droppable.attr("id");
             console.log("dropped onto: " + droppedCandyId)
+
+            droppableCandiesId.forEach(candy => {
+                $(`#${candy}`).removeClass("adjacent");
+                console.log("removed adjacent from " + candy)
+            })
+            droppableCandiesId = [];
 
             checkForCandyCrush();
 
