@@ -34,7 +34,7 @@ Sugar Crush Mode is needed to complete the 2nd and 3rd stage of the game.
 ## Wireframe
 
 <!-- ![wireframe](/wireframe.jpg) -->
-<img src="./Readme/wireframe.jpg" alt="wireframe" width="500">
+<img src="./Readme/wireframe.jpg" alt="wireframe" width="600">
 
 *Figure 1: Wireframe*
 
@@ -90,7 +90,8 @@ Drag and drop event listeners.
 - Applying creativity to my knowledge of array manipulation to write the functions that manipulate the model.
 - Viewing things from the player's perspective, like how to present the candies remaining are sliding down and not randomly generated. 
 
-Functions are written to be presented frame by frame, something like a cartoon animation.
+- Writing functions to be presented step by step, something like a cartoon animation.
+
 - Checking for errors when the code doesn't run as intended and there are no errors in the console. When some candies cannot be dragged and dropped even though they should, I had to comment out parts of the code and pinpoint which code is the cause of the problem.
 
 ## How the Game Runs
@@ -123,7 +124,7 @@ The event listener `dragstart` will detect the id of the candy being dragged. Th
 
 But now candies can be drag and drop even if there is no matching combination. To fix that, before the player can drag a candy, the function `checkThreeAndFourCandiesMovesLeft()` iterates through the whole board to detect all potential scoring combinations. This function also helps to detect whether the player has run out of `moves` so the game can end.
 
-<img src="./Readme/scorableMovesR1.jpg" alt="scorable-moves" width="300">
+<img src="./Readme/scorableMovesR1.jpg" alt="scorable-moves" width="600">
 
 *Figure 3: Scorable Combinations*
 
