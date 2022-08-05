@@ -32,7 +32,7 @@ const stageData = [
                             "cherry"],
         candies: ["candy1", "candy2", "candy3", "candy4"],
         function: () => {
-            getCherries();
+            checkCherries();
             if (cherries===0) {
                 console.log("checking win con stage 2")
                 return true;
@@ -159,7 +159,7 @@ const refillCandiesBoardNewGameOnly = () => {
             }}  
     
         }
-    render();
+    
     console.log("replaced crushed candies - new game")
     
 } 
@@ -172,11 +172,10 @@ const crushCandiesNewGameOnly = () => {
         itemBoard[candyRow][candyCol] = "empty";
     })
     candiesToCrush = [];
-    render();      
         
 } 
 
-const getCherries = () => {
+const checkCherries = () => {
     cherries = 0;
     itemBoard.forEach(array => {
         array.forEach(candy => {
@@ -198,11 +197,14 @@ const newGame = () => {
         
         crushCandiesNewGameOnly();
         refillCandiesBoardNewGameOnly();   
-        checkThreeAndFourCandiesMovesLeft();
+        
     }  
+
+    checkThreeAndFourCandiesMovesLeft();
+    render();
     comboMeter = 0;
     score = 0;    
-    getCherries();
+    checkCherries();
       
 }
 
