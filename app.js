@@ -59,8 +59,8 @@ const stageData = [
 // default stage data
 let BOARDWIDTH = 0;
 let BOARDHEIGHT = 0;
-let CANDIESINIT = ["candy1", "candy2", "candy3", "candy4"];
-let CANDIES = ["candy1", "candy2", "candy3", "candy4"];
+let CANDIESINIT = [];
+let CANDIES = [];
 
 // model info
 let itemBoard = [];
@@ -1421,11 +1421,11 @@ const main = () => {
     document.addEventListener("dragend", event => {
         // reset the transparency
         // event.target.classList.remove("dragging");
-        // droppableCandiesId.forEach(candy => {
-        //     $(`#${candy}`).removeClass("adjacent");
-        //     console.log("removed adjacent from " + candy)
-        // })
-        // droppableCandiesId = [];
+        droppableCandiesId.forEach(candy => {
+            $(`#${candy}`).removeClass("adjacent");
+            console.log("removed adjacent from " + candy)
+        })
+        droppableCandiesId = [];
         // // draggedCandyName = "";
         // console.log("drop targets: " + droppableCandiesId)
         console.log("dragged candy name: " + draggedCandyName)
